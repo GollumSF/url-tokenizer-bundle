@@ -41,7 +41,7 @@ gollum_sf_url_tokenizer:
 $tokenizer = $container->get('gsf_url_tokenizer.tokenizer');
 $url = 'http://www.mydomain.com?param1=a';
 
-$url1Tokenised = tokenizer->generateUrl($url); / /$url1Tokenised => http://www.mydomain.com?param1=a&t=THE_TOKEN
+$url1Tokenised = tokenizer->generateUrl($url); // $url1Tokenised => http://www.mydomain.com?param1=a&t=THE_TOKEN
 
 ```
 
