@@ -3,9 +3,10 @@
 	"type" : "symfony-bundle",
 	"description" : "Simple url tokenizer",
 	"keywords" : [
-		"user",
+		"token",
+		"url",
 		"simple",
-		"overridable",
+		"hash",
 		"gollumsf"
 	],
 	"homepage" : "https://github.com/GollumSF/user-bundle",
