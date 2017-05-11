@@ -10,7 +10,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  *
  * @author Damien Duboeuf <smeagolworms4@gmail.com>
  */
-class Checker {
+class Checker implements CheckerInterface {
 	
 	/**
 	 * @var Tokenizer
@@ -33,7 +33,6 @@ class Checker {
 	 * @return boolean
 	 */
 	public function checkToken($url) {
-		
 		$urlWithoutToken = $this->tokenizer->removeToken($url);
 		$token           = $this->tokenizer->getToken($url);
 		return $this->tokenizer->generateToken($urlWithoutToken) == $token;

@@ -6,7 +6,7 @@ namespace GollumSF\UrlTokenizerBundle\Tokenizer;
  *
  * @author Damien Duboeuf <smeagolworms4@gmail.com>
  */
-class Tokenizer {
+class Tokenizer implements TokenizerInterface {
 	
 	/**
 	 * @var string
