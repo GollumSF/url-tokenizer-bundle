@@ -33,10 +33,10 @@ class Checker implements CheckerInterface {
 	 * @param boolean $fullmatch (optional)
 	 * @return boolean
 	 */
-	public function checkToken($url, $fullmatch = NULL) {
+	public function checkToken($url, $fullmatch = NULL, $key, $key = NULL) {
 		$urlWithoutToken = $this->tokenizer->removeToken($url);
 		$token           = $this->tokenizer->getToken($url);
-		return $this->tokenizer->generateToken($urlWithoutToken, $fullmatch) == $token;
+		return $this->tokenizer->generateToken($urlWithoutToken, $fullmatch, $key) == $token;
 	}
 	
 }

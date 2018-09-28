@@ -46,7 +46,7 @@ class Tokenizer implements TokenizerInterface {
 	 */
 	public function generateUrl($url, $fullmatch = false, $key = NULL) {
 		
-		$token = $this->generateToken($url, key);
+		$token = $this->generateToken($url, $fullmatch, $key);
 		$separator = (strpos($url, '?') === false) ? '?' : '&';
 		
 		return $url.$separator."t=".urlencode($token);
