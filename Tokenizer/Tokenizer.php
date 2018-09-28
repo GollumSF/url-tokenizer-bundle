@@ -25,22 +25,28 @@ class Tokenizer implements TokenizerInterface {
 	 * Generate tokens from an URL
 	 *
 	 * @param string $url
+	 * @param boolean $fullmatch (optional)
 	 * @param string $key (optional)
 	 * @return mixed string
 	 */
-	public function generateToken($url, $key = NULL) {
-		return hash_hmac("sha1", $this->getSortedQuery($url), $key ? $key : $this->keyPrivate);
+	public function generateToken($url, $fullmatch = false, $key = NULL) {
+		$baseUrl = '';
+		if ($fullmatch === true) {
+			$baseUrl = $this->getQueryParameters($url)['baseUrl'].' ';
+		}
+		return hash_hmac("sha1", $baseUrl.$this->getSortedQuery($url), $key ? $key : $this->keyPrivate);
 	}
 	
 	/**
 	 * Generate an URL with its token from an URL without one
 	 *
 	 * @param string $url
+	 * @param boolean $fullmatch (optional)
 	 * @return string
 	 */
-	public function generateUrl($url) {
+	public function generateUrl($url, $fullmatch = false, $key = NULL) {
 		
-		$token = $this->generateToken($url);
+		$token = $this->generateToken($url, key);
 		$separator = (strpos($url, '?') === false) ? '?' : '&';
 		
 		return $url.$separator."t=".urlencode($token);

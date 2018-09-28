@@ -30,12 +30,13 @@ class Checker implements CheckerInterface {
 	 * Test if url tokens are valids
 	 *
 	 * @param string $url
+	 * @param boolean $fullmatch (optional)
 	 * @return boolean
 	 */
-	public function checkToken($url) {
+	public function checkToken($url, $fullmatch = NULL) {
 		$urlWithoutToken = $this->tokenizer->removeToken($url);
 		$token           = $this->tokenizer->getToken($url);
-		return $this->tokenizer->generateToken($urlWithoutToken) == $token;
+		return $this->tokenizer->generateToken($urlWithoutToken, $fullmatch) == $token;
 	}
 	
 }
