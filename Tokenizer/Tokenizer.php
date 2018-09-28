@@ -42,6 +42,7 @@ class Tokenizer implements TokenizerInterface {
 	 *
 	 * @param string $url
 	 * @param boolean $fullmatch (optional)
+	 * @param string $key (optional)
 	 * @return string
 	 */
 	public function generateUrl($url, $fullmatch = false, $key = NULL) {

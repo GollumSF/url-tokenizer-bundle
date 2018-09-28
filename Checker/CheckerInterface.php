@@ -17,8 +17,9 @@ interface CheckerInterface {
 	 *
 	 * @param string $url
 	 * @param boolean $fullmatch (optional)
+	 * @param string $key (optional)
 	 * @return boolean
 	 */
-	public function checkToken($url, $fullmatch);
+	public function checkToken($url, $fullmatch = NULL, $key = NULL);
 	
 }
