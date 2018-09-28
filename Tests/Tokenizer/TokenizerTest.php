@@ -114,7 +114,7 @@ class TokenizerTest extends AbstractWebTestCase {
 		
 		$sortedUrl = $this->invokeMethod($this->tokenizer, 'getSortedQuery', $url);
 		
-		$token  = $this->tokenizer->generateToken ($url, $key);
+		$token  = $this->tokenizer->generateToken ($url, NULL, $key);
 		$result = hash_hmac("sha1", $sortedUrl, $key);
 		
 		$this->assertNotNull($token);
