@@ -34,7 +34,7 @@ interface TokenizerInterface {
 	 * @return mixed string|NULL
 	 */
 	public function removeToken($url);
-	l
+	
 	/**
 	 * Retrieve token from an url
 	 * @param string $url
