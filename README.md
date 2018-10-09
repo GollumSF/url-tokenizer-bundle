@@ -1,4 +1,4 @@
-# GollumSFUserBundle
+# GollumSF Url Tokenizer
 
 [![Build Status](https://travis-ci.org/GollumSF/url-tokenizer-bundle.svg?branch=master)](https://travis-ci.org/GollumSF/url-tokenizer-bundle)
 [![License](https://poser.pugx.org/gollumsf/url-tokenizer-bundle/license)](https://packagist.org/packages/gollumsf/url-tokenizer-bundle)
