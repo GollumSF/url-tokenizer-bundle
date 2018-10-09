@@ -8,6 +8,11 @@
 
 ## Installation:
 
+```shell
+composer require gollumsf/url-tokenizer-bundle
+ ```
+
+
 ### AppKernel.php
 ```php
 class AppKernel extends Kernel {
