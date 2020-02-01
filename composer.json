@@ -9,7 +9,7 @@
 		"hash",
 		"gollumsf"
 	],
-	"homepage" : "https://github.com/GollumSF/user-bundle",
+	"homepage" : "https://github.com/GollumSF/mjml-binary",
 	"license" : "GPL-3.0-or-later",
 	"authors" : [{
 			"name" : "Damien Duboeuf",
