@@ -1,9 +1,12 @@
 # GollumSF Url Tokenizer
 
-[![Build Status](https://travis-ci.org/GollumSF/url-tokenizer-bundle.svg?branch=master)](https://travis-ci.org/GollumSF/url-tokenizer-bundle)
+[![Build Status](https://travis-ci.com/GollumSF/url-tokenizer-bundle.svg?branch=master)](https://travis-ci.com/GollumSF/url-tokenizer-bundle)
+[![Coverage](https://coveralls.io/repos/github/GollumSF/url-tokenizer-bundle/badge.svg?branch=master)](https://coveralls.io/github/GollumSF/url-tokenizer-bundle)
 [![License](https://poser.pugx.org/gollumsf/url-tokenizer-bundle/license)](https://packagist.org/packages/gollumsf/url-tokenizer-bundle)
 [![Latest Stable Version](https://poser.pugx.org/gollumsf/url-tokenizer-bundle/v/stable)](https://packagist.org/packages/gollumsf/url-tokenizer-bundle)
 [![Latest Unstable Version](https://poser.pugx.org/gollumsf/url-tokenizer-bundle/v/unstable)](https://packagist.org/packages/gollumsf/url-tokenizer-bundle)
+[![Discord](https://img.shields.io/discord/671741944149573687?color=purple&label=discord)](https://discord.gg/xMBc5SQ)
+
 
 
 ## Installation:
