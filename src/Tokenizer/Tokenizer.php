@@ -31,7 +31,7 @@ class Tokenizer implements TokenizerInterface {
 	 * @param string $key (optional)
 	 * @return mixed string
 	 */
-	public function generateToken($url, $fullmatch = false, $key = NULL) {
+	public function generateToken(string $url, bool $fullmatch = false, string $key = NULL): string {
 		$baseUrl = '';
 		if ($fullmatch === true) {
 			$baseUrl = $this->getQueryParameters($url)['baseUrl'].' ';
@@ -47,7 +47,7 @@ class Tokenizer implements TokenizerInterface {
 	 * @param string $key (optional)
 	 * @return string
 	 */
-	public function generateUrl($url, $fullmatch = false, $key = NULL) {
+	public function generateUrl(string $url, bool $fullmatch = false, ?string $key = NULL): string {
 		
 		$token = $this->generateToken($url, $fullmatch, $key);
 		$separator = (strpos($url, '?') === false) ? '?' : '&';
@@ -57,19 +57,12 @@ class Tokenizer implements TokenizerInterface {
 	
 	/**
 	 * Remove Tokens from URL
-	 *
-	 * @param string $url
-	 * @return mixed string|NULL
 	 */
-	public function removeToken($url) {
+	public function removeToken(string $url): string {
 		
 		$arParams = $this->getQueryParameters($url);
-		if(count($arParams) > 0) {
-			$baseUrl = $arParams["baseUrl"];
-			$listParams = $arParams["listParams"];
-		} else {
-			return NULL;
-		}
+		$baseUrl = $arParams["baseUrl"];
+		$listParams = $arParams["listParams"];
 		
 		$return = "";
 		$first = true;
@@ -90,11 +83,8 @@ class Tokenizer implements TokenizerInterface {
 	
 	/**
 	 * Retrieve token from an url
-	 * @param string $url
-	 *
-	 * @return mixed string|NULL
 	 */
-	public function getToken($url) {
+	public function getToken(string $url): ?string {
 		
 		$arParams = $this->getQueryParameters($url);
 		
@@ -115,11 +105,8 @@ class Tokenizer implements TokenizerInterface {
 	
 	/**
 	 * Sort query parameters and implode it
-	 *
-	 * @param string $url
-	 * @return string
 	 */
-	protected function getSortedQuery($url) {
+	protected function getSortedQuery(string $url): string {
 		$params = $this->getQueryParameters($url)["listParams"];
 		$keys = [];
 		$out = [];
@@ -135,11 +122,8 @@ class Tokenizer implements TokenizerInterface {
 	
 	/**
 	 * Get query parameters from url
-	 *
-	 * @param string $url
-	 * @return array
 	 */
-	protected function getQueryParameters($url) {
+	protected function getQueryParameters(string $url): array {
 		$listParams  = [];
 		$baseUrl     = $url;
 		$queryParams = '';
@@ -148,14 +132,13 @@ class Tokenizer implements TokenizerInterface {
 			$baseUrl     = substr($url, 0, strpos($url, "?"));
 			$queryParams = substr($url, strpos($url, "?")+1);
 		}
-		
 		$list = explode("&", $queryParams);
 		if ($list) {
 			foreach ($list as $param) {
 				if ($param) {
 					$params = explode("=", $param);
 					$params[0] = urldecode($params[0]);
-					$params[1] = urldecode($params[1]);
+					$params[1] = urldecode(array_key_exists(1, $params) ? $params[1] : '');
 					$listParams[] = $params;
 				}
 			}

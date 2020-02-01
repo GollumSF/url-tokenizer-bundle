@@ -14,12 +14,7 @@ interface CheckerInterface {
 	
 	/**
 	 * Test if url tokens are valids
-	 *
-	 * @param string $url
-	 * @param boolean $fullmatch (optional)
-	 * @param string $key (optional)
-	 * @return boolean
 	 */
-	public function checkToken($url, $fullmatch = NULL, $key = NULL);
+	public function checkToken(string $url, bool $fullmatch = false, ?string $key = NULL): bool ;
 	
 }

@@ -10,22 +10,13 @@ interface TokenizerInterface {
 	
 	/**
 	 * Generate tokens from an URL
-	 *
-	 * @param string $url
-	 * @param boolean $fullmatch (optional)
-	 * @param string $key (optional)
-	 * @return mixed string
 	 */
-	public function generateToken($url, $fullmatch = false, $key = NULL);
+	public function generateToken(string $url, bool $fullmatch = false, string $key = NULL): string;
 	
 	/**
 	 * Generate an URL with its token from an URL without one
-	 *
-	 * @param string $url
-	 * @param boolean $fullmatch (optional)
-	 * @return string
 	 */
-	public function generateUrl($url, $fullmatch = false, $key = NULL);
+	public function generateUrl(string $url, bool $fullmatch = false, ?string $key = NULL): string;
 	
 	/**
 	 * Remove Tokens from URL
@@ -33,13 +24,10 @@ interface TokenizerInterface {
 	 * @param string $url
 	 * @return mixed string|NULL
 	 */
-	public function removeToken($url);
+	public function removeToken(string $url): string;
 	
 	/**
 	 * Retrieve token from an url
-	 * @param string $url
-	 *
-	 * @return mixed string|NULL
 	 */
-	public function getToken($url);
+	public function getToken(string $url): ?string;
 }

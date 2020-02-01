@@ -3,7 +3,6 @@
 namespace GollumSF\UrlTokenizerBundle\Checker;
 
 use GollumSF\UrlTokenizerBundle\Tokenizer\Tokenizer;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Checker
@@ -28,13 +27,8 @@ class Checker implements CheckerInterface {
 	
 	/**
 	 * Test if url tokens are valids
-	 *
-	 * @param string $url
-	 * @param boolean $fullmatch (optional)
-	 * @param string $key (optional)
-	 * @return boolean
 	 */
-	public function checkToken($url, $fullmatch = NULL, $key = NULL) {
+	public function checkToken(string $url, bool $fullmatch = false, ?string $key = NULL): bool {
 		$urlWithoutToken = $this->tokenizer->removeToken($url);
 		$token           = $this->tokenizer->getToken($url);
 		return $this->tokenizer->generateToken($urlWithoutToken, $fullmatch, $key) == $token;
