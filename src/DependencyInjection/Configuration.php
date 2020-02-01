@@ -1,6 +1,7 @@
 <?php
 namespace GollumSF\UrlTokenizerBundle\DependencyInjection;
 
+use GollumSF\UrlTokenizer\Configuration\UrlTokenizerConfigurationInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -10,9 +11,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
  * @author Damien Duboeuf <smeagolworms4@gmail.com>
  */
 class Configuration implements ConfigurationInterface {
-	
-	const DEFAULT_SECRET = 'Default_S3cret_Must_be_Ch4nge!!!';
-	
+
 	public function getConfigTreeBuilder() {
 		
 		$treeBuilder = new TreeBuilder();;
@@ -20,7 +19,7 @@ class Configuration implements ConfigurationInterface {
 		
 		$rootNode
 			->children()
-			->scalarNode('secret')->defaultValue(self::DEFAULT_SECRET)->end()
+			->scalarNode('secret')->defaultValue(UrlTokenizerConfigurationInterface::DEFAULT_SECRET)->end()
 			->end()
 		;
 		

@@ -1,9 +1,10 @@
 <?php
 namespace GollumSF\UrlTokenizerBundle\Tests\Tokenizer;
 
-
-use GollumSF\CoreBundle\Test\AbstractWebTestCase;
+use GollumSF\ReflectionPropertyTest\ReflectionPropertyTrait;
+use GollumSF\UrlTokenizerBundle\Configuration\UrlTokenizerConfigurationInterface;
 use GollumSF\UrlTokenizerBundle\Tokenizer\Tokenizer;
+use PHPUnit\Framework\TestCase;
 
 
 /**
@@ -11,7 +12,9 @@ use GollumSF\UrlTokenizerBundle\Tokenizer\Tokenizer;
  *
  * @author Damien Duboeuf <smeagolworms4@gmail.com>
  */
-class TokenizerTest extends AbstractWebTestCase {
+class TokenizerTest extends TestCase {
+	
+	use ReflectionPropertyTrait;
 	
 	const TOKEN = 'SuperTestKey!é&95';
 	
@@ -25,18 +28,17 @@ class TokenizerTest extends AbstractWebTestCase {
 	const URL3_WITHTOKEN_TEST1 = 'http://www.urltokenizer.com/fakepath?t=a0123456789&param1=ZZ&param2=hh';
 	const URL3_WITHTOKEN_TEST2 = 'http://www.urltokenizer.com/fakepath?param1=ZZ&t=a0123456789&param2=hh';
 	
-	/**
-	 * @var Tokenizer
-	 */
+	/** @var Tokenizer */
 	private $tokenizer;
 	
 	
-	/**
-	 * Call before the test
-	 */
-	protected function setUp () {
-		parent::setUp ();
-		$this->tokenizer = new Tokenizer(self::TOKEN.uniqid());
+	protected function setUp(): void {
+		$configuration = $this->getMockForAbstractClass(UrlTokenizerConfigurationInterface::class);
+		$configuration
+			->method('getSecret')
+			->willReturn(self::TOKEN.uniqid())
+		;
+		$this->tokenizer = new Tokenizer($configuration);
 	}
 	
 	public function provideGetSortedQuery() {
@@ -95,11 +97,10 @@ class TokenizerTest extends AbstractWebTestCase {
 	}
 
 	/**
-	 * @covers GollumSF\UrlTokenizerBundle\Tokenizer\Tokenizer::getSortedQuery
 	 * @dataProvider provideGetSortedQuery
 	 */
 	public function testGetSortedQuery($url, $result) {
-		$ordered = $this->invokeMethod($this->tokenizer, 'getSortedQuery', $url);
+		$ordered = $this->reflectionCallMethod($this->tokenizer, 'getSortedQuery', [ $url ]);
 		
 		$this->assertEquals($ordered, $result);
 	}
@@ -107,12 +108,11 @@ class TokenizerTest extends AbstractWebTestCase {
 	
 	/**
 	 * @depends testGetSortedQuery
-	 * @covers GollumSF\UrlTokenizerBundle\Tokenizer\Tokenizer::generateToken
 	 * @dataProvider provideGenerateToken
 	 */
 	public function testGenerateToken($url, $key) {
 		
-		$sortedUrl = $this->invokeMethod($this->tokenizer, 'getSortedQuery', $url);
+		$sortedUrl = $this->reflectionCallMethod($this->tokenizer, 'getSortedQuery', [ $url ]);
 		
 		$token  = $this->tokenizer->generateToken ($url, NULL, $key);
 		$result = hash_hmac("sha1", $sortedUrl, $key);
@@ -124,7 +124,6 @@ class TokenizerTest extends AbstractWebTestCase {
 	
 	/**
 	 * @depends testGenerateToken
-	 * @covers GollumSF\UrlTokenizerBundle\Tokenizer\Tokenizer::generateUrl
 	 * @dataProvider provideGenerateUrl
 	 */
 	public function testGenerateUrl($urlOri, $separator) {
@@ -134,7 +133,6 @@ class TokenizerTest extends AbstractWebTestCase {
 	}
 	
 	/**
-	 * @covers GollumSF\UrlTokenizerBundle\Tokenizer\Tokenizer::removeToken
 	 * @dataProvider provideRemoveTokenInUrl
 	 */
 	public  function testRemoveTokenInUrl($urlWithToken, $url) {
@@ -142,7 +140,6 @@ class TokenizerTest extends AbstractWebTestCase {
 	}
 	
 	/**
-	 * @covers GollumSF\UrlTokenizerBundle\Tokenizer\Tokenizer::getToken
 	 * @dataProvider provideGetTokenInUrl
 	 */
 	public  function testGetTokenInUrl($url, $token) {
@@ -152,7 +149,6 @@ class TokenizerTest extends AbstractWebTestCase {
 	/**
 	 * @depends testGenerateUrl
 	 * @depends testRemoveTokenInUrl
-	 * @covers GollumSF\UrlTokenizerBundle\Tokenizer\Tokenizer::generateToken
 	 * @dataProvider provideTokenOrder
 	 */
 	public  function testTokenOrder($url1, $url2) {

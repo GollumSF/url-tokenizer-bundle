@@ -1,6 +1,8 @@
 <?php
 namespace GollumSF\UrlTokenizerBundle\Tokenizer;
 
+use GollumSF\UrlTokenizerBundle\Configuration\UrlTokenizerConfigurationInterface;
+
 /**
  * Tokeniser
  *
@@ -9,16 +11,16 @@ namespace GollumSF\UrlTokenizerBundle\Tokenizer;
 class Tokenizer implements TokenizerInterface {
 	
 	/**
-	 * @var string
+	 * @var UrlTokenizerConfigurationInterface
 	 */
-	private $keyPrivate;
+	private $configuration;
 	
 	/**
 	 * Tokeniser constructor.
 	 * @param string $keyPrivate
 	 */
-	public function __construct($keyPrivate) {
-		$this->keyPrivate = $keyPrivate;
+	public function __construct(UrlTokenizerConfigurationInterface $configuration) {
+		$this->configuration = $configuration;
 	}
 	
 	/**
@@ -34,7 +36,7 @@ class Tokenizer implements TokenizerInterface {
 		if ($fullmatch === true) {
 			$baseUrl = $this->getQueryParameters($url)['baseUrl'].' ';
 		}
-		return hash_hmac("sha1", $baseUrl.$this->getSortedQuery($url), $key ? $key : $this->keyPrivate);
+		return hash_hmac("sha1", $baseUrl.$this->getSortedQuery($url), $key ? $key : $this->configuration->getSecret());
 	}
 	
 	/**
