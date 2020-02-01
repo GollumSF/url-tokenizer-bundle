@@ -15,6 +15,8 @@ use PHPUnit\Framework\TestCase;
  */
 class CheckcerTest extends TestCase {
 	
+	const ALGO = 'sha256';
+	
 	const TOKEN = 'SuperTestKey!é&95';
 	
 	const URL_TEST1 = 'http://www.urltokenizer.com/fakepath';
@@ -34,6 +36,10 @@ class CheckcerTest extends TestCase {
 		$configuration
 			->method('getSecret')
 			->willReturn(self::TOKEN.uniqid())
+		;
+		$configuration
+			->method('getAlgo')
+			->willReturn(self::ALGO)
 		;
 		$this->tokenizer = new Tokenizer($configuration);
 		$this->checker = new Checker($this->tokenizer);

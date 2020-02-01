@@ -36,7 +36,7 @@ class Tokenizer implements TokenizerInterface {
 		if ($fullmatch === true) {
 			$baseUrl = $this->getQueryParameters($url)['baseUrl'].' ';
 		}
-		return hash_hmac("sha1", $baseUrl.$this->getSortedQuery($url), $key ? $key : $this->configuration->getSecret());
+		return hash_hmac($this->configuration->getAlgo(), $baseUrl.$this->getSortedQuery($url), $key ? $key : $this->configuration->getSecret());
 	}
 	
 	/**

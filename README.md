@@ -25,7 +25,8 @@ return [
 
 ```yaml
 gollum_sf_url_tokenizer:
-    secret: Default_S3cret_Must_be_Ch4nge!!!  # Default secret key for token
+    secret: Default_S3cret_Must_be_Ch4nge!!!  # Default secret key for token MUST BE CHANGE
+    algo: 'sha256'  # (optional) Algo for hash token. default: "sha256' (must be in list returned by hash_hmac_algos())
 ```
 
 ## Usage

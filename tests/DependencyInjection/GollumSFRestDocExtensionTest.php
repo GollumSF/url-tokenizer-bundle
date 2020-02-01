@@ -25,8 +25,8 @@ class GollumSFUrlTokenizerExtensionTest extends AbstractExtensionTestCase {
 
 	public function providerLoadConfiguration() {
 		return [
-			[ [], UrlTokenizerConfigurationInterface::DEFAULT_SECRET ],
-			[ [ 'secret'=> 'SECRET' ], 'SECRET' ],
+			[ [], UrlTokenizerConfigurationInterface::DEFAULT_SECRET, UrlTokenizerConfigurationInterface::DEFAULT_ALGO ],
+			[ [ 'secret'=> 'SECRET', 'algo' => 'sha1' ], 'SECRET', 'sha1' ],
 		];
 	}
 
@@ -35,10 +35,12 @@ class GollumSFUrlTokenizerExtensionTest extends AbstractExtensionTestCase {
 	 */
 	public function testLoadConfiguration(
 		$config,
-		$secret
+		$secret,
+		$algo
 	) {
 		$this->load($config);
 		
 		$this->assertContainerBuilderHasServiceDefinitionWithArgument(UrlTokenizerConfigurationInterface::class, 0, $secret);
+		$this->assertContainerBuilderHasServiceDefinitionWithArgument(UrlTokenizerConfigurationInterface::class, 1, $algo);
 	}
 }

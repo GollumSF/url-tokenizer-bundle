@@ -15,6 +15,8 @@ use PHPUnit\Framework\TestCase;
 class TokenizerTest extends TestCase {
 	
 	use ReflectionPropertyTrait;
+
+	const ALGO = 'sha256';
 	
 	const TOKEN = 'SuperTestKey!é&95';
 	
@@ -37,6 +39,10 @@ class TokenizerTest extends TestCase {
 		$configuration
 			->method('getSecret')
 			->willReturn(self::TOKEN.uniqid())
+		;
+		$configuration
+			->method('getAlgo')
+			->willReturn(self::ALGO)
 		;
 		$this->tokenizer = new Tokenizer($configuration);
 	}
@@ -78,8 +84,8 @@ class TokenizerTest extends TestCase {
 		$sortedUrl = $this->reflectionCallMethod($this->tokenizer, 'getSortedQuery', [ $url ]);
 
 		$token  = $this->tokenizer->generateToken ($url, false, $key);
-		$result = hash_hmac("sha1", $sortedUrl, $key);
-
+		$result = hash_hmac(self::ALGO, $sortedUrl, $key);
+		
 		$this->assertNotNull($token);
 		$this->assertNotEmpty($token);
 		$this->assertEquals($token,$result);
@@ -94,7 +100,7 @@ class TokenizerTest extends TestCase {
 		$sortedUrl = $this->reflectionCallMethod($this->tokenizer, 'getSortedQuery', [ $url ]);
 
 		$token  = $this->tokenizer->generateToken ($url, true, $key);
-		$result = hash_hmac("sha1", 'http://www.urltokenizer.com/fakepath '.$sortedUrl, $key);
+		$result = hash_hmac(self::ALGO, 'http://www.urltokenizer.com/fakepath '.$sortedUrl, $key);
 
 		$this->assertNotNull($token);
 		$this->assertNotEmpty($token);

@@ -9,8 +9,10 @@ class UrlTokenizerConfigurationTest extends TestCase {
 
 	public function testConstructor() {
 		$apiDocConfiguration1 = new UrlTokenizerConfiguration(
-			'SECRET'
+			'SECRET',
+			'ALGO'
 		);
 		$this->assertEquals($apiDocConfiguration1->getSecret(), 'SECRET');
+		$this->assertEquals($apiDocConfiguration1->getAlgo(), 'ALGO');
 	}
 }

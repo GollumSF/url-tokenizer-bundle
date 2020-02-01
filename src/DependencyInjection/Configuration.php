@@ -18,6 +18,7 @@ class Configuration implements ConfigurationInterface {
 
 		$treeBuilder->getRootNode()->children()
 			->scalarNode('secret')->defaultValue(UrlTokenizerConfigurationInterface::DEFAULT_SECRET)->end()
+			->enumNode('algo')->values(hash_hmac_algos())->defaultValue(UrlTokenizerConfigurationInterface::DEFAULT_ALGO)->end()
 		->end();
 		
 		return $treeBuilder;
