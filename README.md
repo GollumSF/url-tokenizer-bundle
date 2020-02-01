@@ -1,6 +1,6 @@
 # GollumSF Url Tokenizer
 
-[![Build Status](https://travis-ci.com/GollumSF/url-tokenizer-bundle.svg?branch=master)](https://travis-ci.com/GollumSF/url-tokenizer-bundle)
+[![Build Status](https://travis-ci.org/GollumSF/url-tokenizer-bundle.svg?branch=master)](https://travis-ci.org/GollumSF/url-tokenizer-bundle)
 [![Coverage](https://coveralls.io/repos/github/GollumSF/url-tokenizer-bundle/badge.svg?branch=master)](https://coveralls.io/github/GollumSF/url-tokenizer-bundle)
 [![License](https://poser.pugx.org/gollumsf/url-tokenizer-bundle/license)](https://packagist.org/packages/gollumsf/url-tokenizer-bundle)
 [![Latest Stable Version](https://poser.pugx.org/gollumsf/url-tokenizer-bundle/v/stable)](https://packagist.org/packages/gollumsf/url-tokenizer-bundle)
@@ -13,28 +13,17 @@
 composer require gollumsf/url-tokenizer-bundle
  ```
 
-
-### AppKernel.php
+### config/bundles.php
 ```php
-class AppKernel extends Kernel {
-	
-	public function registerBundles() {
-		
-		$bundles = [
-			
-			// [...] //
-			
-			new GollumSF\UrlTokenizerBundle\GollumSFUrlTokenizerBundle(),
-			
-			// [...] // 
-		}
-	}
-}
+return [
+    // [ ... ]
+    GollumSF\UrlTokenizerBundle\GollumSFUrlTokenizerBundle::class => ['all' => true],
+];
 ```
 
 ### config.yml
 
-```yml
+```yaml
 gollum_sf_url_tokenizer:
     secret: Default_S3cret_Must_be_Ch4nge!!!  # Default secret key for token
 ```
@@ -44,19 +33,45 @@ gollum_sf_url_tokenizer:
 ## Tokenize URL
 
 ```php
-$tokenizer = $container->get('gsf_url_tokenizer.tokenizer');
-$url = 'http://www.mydomain.com?param1=a';
+<?php
 
-$url1Tokenised = tokenizer->generateUrl($url); // $url1Tokenised => http://www.mydomain.com?param1=a&t=THE_TOKEN
+use GollumSF\UrlTokenizerBundle\Tokenizer\TokenizerInterface;
 
+public function (TokenizerInterface $tokenizer) { // Inject service
+    
+    $url = 'http://www.mydomain.com?param1=a';
+    
+    // $url1Tokenised => http://www.mydomain.com?param1=a&t=THE_TOKEN (tokenize only parameter)
+    $url1Tokenised = $tokenizer->generateUrl($url);
+    
+    // $url1Tokenised => http://www.mydomain.com?param1=a&t=THE_TOKEN (tokenize full url)
+    $url1Tokenised = $tokenizer->generateUrl($url, true);
+    
+    // $url1Tokenised => http://www.mydomain.com?param1=a&t=THE_TOKEN (use custom secret)
+    $url1Tokenised = $tokenizer->generateUrl($url, false, 'CUSTOM SECRET');
+
+}
 ```
 
 ## Check URL tokenized
 
 ```php
-$checker = $container->get('gsf_url_tokenizer.ckecker');
-$urlWithToken = http://www.mydomain.com?param1=a&t=THE_TOKEN';
+<?php
 
-$result = checker->checkToken($urlWithToken); // $result => true or false
+use GollumSF\UrlTokenizerBundle\Checker\CheckerInterface;
 
+public function (CheckerInterface $checker) { // Inject service
+    
+    $urlWithToken = 'http://www.mydomain.com?param1=a&t=THE_TOKEN';
+    
+    // $result => true or false
+    $result = $checker->checkToken($urlWithToken);
+    
+    // $result => true or false (use full url)
+    $result = $checker->checkToken($urlWithToken, true);
+    
+    // $result => true or false (use custom secret)
+    $result = $checker->checkToken($urlWithToken, false, 'CUSTOM SECRET');
+    
+}
 ```

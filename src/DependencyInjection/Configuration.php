@@ -1,7 +1,7 @@
 <?php
 namespace GollumSF\UrlTokenizerBundle\DependencyInjection;
 
-use GollumSF\UrlTokenizer\Configuration\UrlTokenizerConfigurationInterface;
+use GollumSF\UrlTokenizerBundle\Configuration\UrlTokenizerConfigurationInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -13,15 +13,12 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 class Configuration implements ConfigurationInterface {
 
 	public function getConfigTreeBuilder() {
-		
-		$treeBuilder = new TreeBuilder();;
-		$rootNode = $treeBuilder->root('gollum_sf_url_tokenizer');
-		
-		$rootNode
-			->children()
+
+		$treeBuilder = new TreeBuilder('gollum_sf_url_tokenizer');
+
+		$treeBuilder->getRootNode()->children()
 			->scalarNode('secret')->defaultValue(UrlTokenizerConfigurationInterface::DEFAULT_SECRET)->end()
-			->end()
-		;
+		->end();
 		
 		return $treeBuilder;
 	}
