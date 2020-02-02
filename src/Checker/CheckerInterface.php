@@ -11,6 +11,11 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  * @author Damien Duboeuf <smeagolworms4@gmail.com>
  */
 interface CheckerInterface {
+
+	/**
+	 * Test if url in master Request tokens are valids
+	 */
+	public function checkMasterRequest(bool $fullmatch = false, ?string $key = NULL): bool;
 	
 	/**
 	 * Test if url tokens are valids

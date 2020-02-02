@@ -4,8 +4,12 @@ namespace GollumSF\UrlTokenizerBundle\Tests\Checkcer;
 
 use GollumSF\UrlTokenizerBundle\Configuration\UrlTokenizerConfigurationInterface;
 use GollumSF\UrlTokenizerBundle\Checker\Checker;
+use GollumSF\UrlTokenizerBundle\Reflection\ControllerActionExtractor;
+use GollumSF\UrlTokenizerBundle\Reflection\ControllerActionExtractorInterface;
 use GollumSF\UrlTokenizerBundle\Tokenizer\Tokenizer;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 
 /**
@@ -26,12 +30,17 @@ class CheckcerTest extends TestCase {
 	
 	/** @var Tokenizer */
 	private $tokenizer;
-	
+
 	/**  @var Checker */
 	private $checker;
+
+	/**  @var RequestStack|MockObject */
+	private $requestStack;
 	
 	
 	protected function setUp (): void {
+		$this->requestStack = $this->getMockBuilder(RequestStack::class)->disableOriginalConstructor()->getMock();
+		
 		$configuration = $this->getMockForAbstractClass(UrlTokenizerConfigurationInterface::class);
 		$configuration
 			->method('getSecret')
@@ -41,8 +50,9 @@ class CheckcerTest extends TestCase {
 			->method('getAlgo')
 			->willReturn(self::ALGO)
 		;
+		
 		$this->tokenizer = new Tokenizer($configuration);
-		$this->checker = new Checker($this->tokenizer);
+		$this->checker = new Checker($this->tokenizer, $this->requestStack);
 	}
 	
 	public function provideCheckTokenOK() {

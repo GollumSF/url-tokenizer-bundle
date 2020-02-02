@@ -8,8 +8,16 @@ services:
           # fetching services directly from the container via $container->get() won't work.
         # The best practice is to be explicit about your dependencies anyway.
 
+    GollumSF\UrlTokenizerBundle\EventSubscriber\:
+        resource: '../../EventSubscriber/*'
+        tags:
+            - { name: kernel.event_subscriber }
+
     GollumSF\UrlTokenizerBundle\Tokenizer\TokenizerInterface:
         class: GollumSF\UrlTokenizerBundle\Tokenizer\Tokenizer
 
     GollumSF\UrlTokenizerBundle\Checker\CheckerInterface:
         class: GollumSF\UrlTokenizerBundle\Checker\Checker
+
+    GollumSF\UrlTokenizerBundle\Reflection\ControllerActionExtractorInterface:
+        class: GollumSF\UrlTokenizerBundle\Reflection\ControllerActionExtractor
