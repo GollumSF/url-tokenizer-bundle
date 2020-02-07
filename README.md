@@ -131,6 +131,6 @@ class GenerateController extends AbstractController {
 
 ### Options
 
-    - **fullUrl**: (boolean, default = null) If null use condifuration value. 
-    - **key**: (string, default = null) If null use condifuration value.
-    - **lifeTime**: (integer, default = null) If null don't check time. Is lifetime of token before creation
+ - **fullUrl**: (boolean, default = null) If null use condifuration value. 
+ - **key**: (string, default = null) If null use condifuration value.
+ - **lifeTime**: (integer, default = null) If null don't check time. Is lifetime of token before creation
