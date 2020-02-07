@@ -57,7 +57,6 @@ public function (TokenizerInterface $tokenizer) { // Inject service
 
 }
 ```
-
 ## Check URL tokenized
 
 ```php
@@ -76,7 +75,62 @@ public function (CheckerInterface $checker) { // Inject service
     $result = $checker->checkToken($urlWithToken, true);
     
     // $result => true or false (use custom secret)
-    $result = $checker->checkToken($urlWithToken, false, 'CUSTOM SECRET');
-    
+    $result = $checker->checkToken($urlWithToken, null, 'CUSTOM SECRET');
+
+    // $result => true or false automatic use url from Master Request 
+    $result = $checker->checkTokenMasterRequest();
+    $result = $checker->checkTokenMasterRequest(true);
+    $result = $checker->checkTokenMasterRequest(null, 'CUSTOM SECRET');
+
+    // $result => is true if token is generate before 3600 second ago
+    $result = $checker->checkTokenTime($urlWithToken, 3600);
+    $result = $checker->checkTokenTimeMasterRequest(3600); // on Master Request
+
+    // $result => result on valid Token and Time 
+    $result = $checker->checkTokenAndTokenTime($urlWithToken, 3600);
+    $result = $checker->checkTokenAndTokenTimeMasterRequest(3600); // on Master Request
+
 }
 ```
+
+## Use annotation
+
+Use `ValidToken` annotation for restrain access at action.
+
+```php
+<?php
+
+use GollumSF\UrlTokenizerBundle\Annotation\ValidToken;
+use GollumSF\UrlTokenizerBundle\Tokenizer\TokenizerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\RouterInterface;
+
+
+class GenerateController extends AbstractController {
+
+	/**
+	 * @Route("/generate")
+	 */
+	public function generate(TokenizerInterface $tokenizer) {
+		return new Response($tokenizer->generateUrl(
+			$this->generateUrl('validate', [ 'param' => 'value' ], RouterInterface::ABSOLUTE_URL)
+		));
+	}
+
+	/**
+	 * @Route("/validate", name="validate")
+	 * @ValidToken()
+	 */
+	public function validate(TokenizerInterface $tokenizer) {
+		return new Response('good');
+	}
+
+```
+
+### Options
+
+    - **fullUrl**: (boolean, default = null) If null use condifuration value. 
+    - **key**: (string, default = null) If null use condifuration value.
+    - **lifeTime**: (integer, default = null) If null don't check time. Is lifetime of token before creation
