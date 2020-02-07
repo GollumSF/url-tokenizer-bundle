@@ -17,6 +17,7 @@ composer require gollumsf/url-tokenizer-bundle
 ```php
 return [
     // [ ... ]
+    Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle::class => ['all' => true],
     GollumSF\UrlTokenizerBundle\GollumSFUrlTokenizerBundle::class => ['all' => true],
 ];
 ```
@@ -25,8 +26,11 @@ return [
 
 ```yaml
 gollum_sf_url_tokenizer:
-    secret: Default_S3cret_Must_be_Ch4nge!!!  # Default secret key for token MUST BE CHANGE
-    algo: 'sha256'  # (optional) Algo for hash token. default: "sha256' (must be in list returned by hash_hmac_algos())
+    secret: Default_S3cret_Must_be_Ch4nge!!! # Default secret key for token MUST BE CHANGE
+    default_full_url: false'                 # (optional, default: false) By default tokenise full url or only parameter
+    algo: 'sha256'                           # (optional, default: "sha256') Algo for hash token. (must be in list returned by hash_hmac_algos())
+    token_query_name: "t"                    # (optional, default: "t") Query token param name for url tokenized
+    token_time_query_name: "d"               # (optional, default: "d") Query token time param name for url tokenized
 ```
 
 ## Usage
@@ -42,13 +46,13 @@ public function (TokenizerInterface $tokenizer) { // Inject service
     
     $url = 'http://www.mydomain.com?param1=a';
     
-    // $url1Tokenised => http://www.mydomain.com?param1=a&t=THE_TOKEN (tokenize only parameter)
+    // $url1Tokenised => http://www.mydomain.com?param1=a&t=THE_TOKENd=1580775131 (tokenize only parameter)
     $url1Tokenised = $tokenizer->generateUrl($url);
     
-    // $url1Tokenised => http://www.mydomain.com?param1=a&t=THE_TOKEN (tokenize full url)
+    // $url1Tokenised => http://www.mydomain.com?param1=a&t=THE_TOKENd=1580775131 (tokenize full url)
     $url1Tokenised = $tokenizer->generateUrl($url, true);
     
-    // $url1Tokenised => http://www.mydomain.com?param1=a&t=THE_TOKEN (use custom secret)
+    // $url1Tokenised => http://www.mydomain.com?param1=a&t=THE_TOKENd=1580775131 (use custom secret)
     $url1Tokenised = $tokenizer->generateUrl($url, false, 'CUSTOM SECRET');
 
 }
@@ -63,7 +67,7 @@ use GollumSF\UrlTokenizerBundle\Checker\CheckerInterface;
 
 public function (CheckerInterface $checker) { // Inject service
     
-    $urlWithToken = 'http://www.mydomain.com?param1=a&t=THE_TOKEN';
+    $urlWithToken = 'http://www.mydomain.com?param1=a&t=THE_TOKEN&d=1580775131';
     
     // $result => true or false
     $result = $checker->checkToken($urlWithToken);

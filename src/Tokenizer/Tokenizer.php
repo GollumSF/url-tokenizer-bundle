@@ -1,6 +1,7 @@
 <?php
 namespace GollumSF\UrlTokenizerBundle\Tokenizer;
 
+use GollumSF\UrlTokenizerBundle\Calendar\Calendar;
 use GollumSF\UrlTokenizerBundle\Configuration\UrlTokenizerConfigurationInterface;
 
 /**
@@ -15,25 +16,24 @@ class Tokenizer implements TokenizerInterface {
 	 */
 	private $configuration;
 	
-	/**
-	 * Tokeniser constructor.
-	 * @param string $keyPrivate
-	 */
-	public function __construct(UrlTokenizerConfigurationInterface $configuration) {
+	/** @var Calendar */
+	private $calendar;
+	
+	public function __construct(
+		UrlTokenizerConfigurationInterface $configuration,
+		Calendar $calendar = null
+	) {
 		$this->configuration = $configuration;
+		$this->calendar = $calendar ? $calendar : new Calendar();
 	}
 	
 	/**
 	 * Generate tokens from an URL
-	 *
-	 * @param string $url
-	 * @param boolean $fullmatch (optional)
-	 * @param string $key (optional)
-	 * @return mixed string
 	 */
-	public function generateToken(string $url, bool $fullmatch = false, string $key = NULL): string {
+	public function generateToken(string $url, bool $fullUrl = null, string $key = NULL): string {
 		$baseUrl = '';
-		if ($fullmatch === true) {
+		$fullUrl = $fullUrl === null ? $this->configuration->getDefaultFullUrl() : $fullUrl;
+		if ($fullUrl === true) {
 			$baseUrl = $this->getQueryParameters($url)['baseUrl'].' ';
 		}
 		return hash_hmac($this->configuration->getAlgo(), $baseUrl.$this->getSortedQuery($url), $key ? $key : $this->configuration->getSecret());
@@ -41,24 +41,26 @@ class Tokenizer implements TokenizerInterface {
 	
 	/**
 	 * Generate an URL with its token from an URL without one
-	 *
-	 * @param string $url
-	 * @param boolean $fullmatch (optional)
-	 * @param string $key (optional)
-	 * @return string
 	 */
-	public function generateUrl(string $url, bool $fullmatch = false, ?string $key = NULL): string {
+	public function generateUrl(string $url, bool $fullUrl = null, ?string $key = NULL): string {
+
+		$tokenQueryName = $this->configuration->getTokenQueryName();
+		$tokenTimeQueryName = $this->configuration->getTokenTimeQueryName();
 		
-		$token = $this->generateToken($url, $fullmatch, $key);
 		$separator = (strpos($url, '?') === false) ? '?' : '&';
+		$url .= $separator.$tokenTimeQueryName.'='.$this->calendar->time();
 		
-		return $url.$separator."t=".urlencode($token);
+		$token = $this->generateToken($url, $fullUrl, $key);
+		
+		return $url.'&'.$tokenQueryName.'='.rawurlencode($token);
 	}
 	
 	/**
 	 * Remove Tokens from URL
 	 */
 	public function removeToken(string $url): string {
+
+		$tokenQueryName = $this->configuration->getTokenQueryName();
 		
 		$arParams = $this->getQueryParameters($url);
 		$baseUrl = $arParams["baseUrl"];
@@ -71,8 +73,8 @@ class Tokenizer implements TokenizerInterface {
 			if ($first) {
 				$glu = "?";
 			}
-			if ($arParams[0] != "t") {
-				$return .= $glu.urlencode($arParams[0])."=".urlencode($arParams[1]);
+			if ($arParams[0] !== $tokenQueryName) {
+				$return .= $glu.rawurlencode($arParams[0])."=".rawurlencode($arParams[1]);
 				$first = false;
 			}
 		}
@@ -85,21 +87,33 @@ class Tokenizer implements TokenizerInterface {
 	 * Retrieve token from an url
 	 */
 	public function getToken(string $url): ?string {
-		
+		$tokenQueryName = $this->configuration->getTokenQueryName();
+		return $this->extractParameterFromUrl($url, $tokenQueryName);
+	}
+
+	/**
+	 * Retrieve token time from an url
+	 */
+	public function getTokenTime(string $url): ?int {
+		$tokenTimeQueryName = $this->configuration->getTokenTimeQueryName();
+		$value = $this->extractParameterFromUrl($url, $tokenTimeQueryName);
+		return $value ? (int)$value : null;
+	}
+
+	protected function extractParameterFromUrl(string $url, string $paramName): ?string {
 		$arParams = $this->getQueryParameters($url);
-		
+
 		if(count($arParams) > 0) {
 			$listParams = $arParams["listParams"];
 		}
-		
+
 		if (isset($listParams) && count($listParams) > 0) {
 			foreach ($listParams as $arrayParts) {
-				if ($arrayParts[0] == 't') {
+				if ($arrayParts[0] === $paramName) {
 					return $arrayParts[1];
 				}
 			}
 		}
-		
 		return NULL;
 	}
 	
@@ -115,7 +129,7 @@ class Tokenizer implements TokenizerInterface {
 		}
 		array_multisort($keys, SORT_ASC, $params);
 		foreach ($params as $param) {
-			$out[] = urlencode($param[0]).'='.urlencode($param[1]);
+			$out[] = rawurlencode($param[0]).'='.rawurlencode($param[1]);
 		}
 		return implode("&", $out);
 	}
@@ -137,8 +151,8 @@ class Tokenizer implements TokenizerInterface {
 			foreach ($list as $param) {
 				if ($param) {
 					$params = explode("=", $param);
-					$params[0] = urldecode($params[0]);
-					$params[1] = urldecode(array_key_exists(1, $params) ? $params[1] : '');
+					$params[0] = rawurldecode($params[0]);
+					$params[1] = rawurldecode(array_key_exists(1, $params) ? $params[1] : '');
 					$listParams[] = $params;
 				}
 			}

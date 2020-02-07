@@ -3,15 +3,13 @@ namespace GollumSF\UrlTokenizerBundle\EventSubscriber;
 
 use GollumSF\UrlTokenizerBundle\Annotation\ValidToken;
 use GollumSF\UrlTokenizerBundle\Checker\CheckerInterface;
-use GollumSF\UrlTokenizerBundle\Traits\AnnotationControllerReader;
+use GollumSF\UrlTokenizerBundle\Exception\ExpiredTokentHttpException;
+use GollumSF\UrlTokenizerBundle\Exception\InvalidTokentHttpException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 class ValidTokenSubscriber implements EventSubscriberInterface {
-	
-	use AnnotationControllerReader;
 	
 	/** @var CheckerInterface */
 	private $checker;
@@ -33,11 +31,15 @@ class ValidTokenSubscriber implements EventSubscriberInterface {
 		$request = $event->getRequest();
 		
 		/** @var ValidToken $validToken */
-		$validToken = $this->getAnnotation($request, ValidToken::class);
+		$validToken = $request->attributes->get('_'.ValidToken::ALIAS_NAME);
 		
 		if ($validToken) {
-			if (!$this->checker->checkMasterRequest($validToken->fullMatch, $validToken->fullMatch)) {
-				throw new BadRequestHttpException('Url token invalid');
+			if (!$this->checker->checkTokenMasterRequest($validToken->isFullUrl(), $validToken->getKey())) {
+				throw new InvalidTokentHttpException('Token url invalid');
+			}
+			$lifeTime = $validToken->getLifeTime();
+			if ($lifeTime && !$this->checker->checkTokenTimeMasterRequest($lifeTime)) {
+				throw new ExpiredTokentHttpException('Token url expired');
 			}
 		}
 		

@@ -18,7 +18,10 @@ class Configuration implements ConfigurationInterface {
 
 		$treeBuilder->getRootNode()->children()
 			->scalarNode('secret')->defaultValue(UrlTokenizerConfigurationInterface::DEFAULT_SECRET)->end()
+			->scalarNode('default_full_url')->defaultValue(UrlTokenizerConfigurationInterface::DEFAULT_DEFAULT_FULL_URL)->end()
 			->enumNode('algo')->values(hash_hmac_algos())->defaultValue(UrlTokenizerConfigurationInterface::DEFAULT_ALGO)->end()
+			->scalarNode('token_query_name')->defaultValue(UrlTokenizerConfigurationInterface::DEFAULT_TOKEN_QUERY_NAME)->end()
+			->scalarNode('token_time_query_name')->defaultValue(UrlTokenizerConfigurationInterface::DEFAULT_TOKEN_TIME_QUERY_NAME)->end()
 		->end();
 		
 		return $treeBuilder;
