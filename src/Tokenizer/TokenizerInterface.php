@@ -11,12 +11,12 @@ interface TokenizerInterface {
 	/**
 	 * Generate tokens from an URL
 	 */
-	public function generateToken(string $url, bool $fullUrl = false, string $key = NULL): string;
+	public function generateToken(string $url, bool $fullUrl = null, string $key = NULL): string;
 	
 	/**
 	 * Generate an URL with its token from an URL without one
 	 */
-	public function generateUrl(string $url, bool $fullUrl = false, ?string $key = NULL): string;
+	public function generateUrl(string $url, bool $fullUrl = null, ?string $key = NULL): string;
 	
 	/**
 	 * Remove Tokens from URL

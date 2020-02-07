@@ -21,6 +21,7 @@ class GollumSFUrlTokenizerExtension extends Extension {
 		$container
 			->register(UrlTokenizerConfigurationInterface::class, UrlTokenizerConfiguration::class)
 			->addArgument($config['secret'])
+			->addArgument($config['default_full_url'])
 			->addArgument($config['algo'])
 			->addArgument($config['token_query_name'])
 			->addArgument($config['token_time_query_name'])

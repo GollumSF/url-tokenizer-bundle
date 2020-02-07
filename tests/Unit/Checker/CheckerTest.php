@@ -1,5 +1,5 @@
 <?php
-namespace GollumSF\UrlTokenizerBundle\Tests\Checkcer;
+namespace Test\GollumSF\UrlTokenizerBundle\Unit\Checkcer;
 
 
 use GollumSF\UrlTokenizerBundle\Configuration\UrlTokenizerConfigurationInterface;

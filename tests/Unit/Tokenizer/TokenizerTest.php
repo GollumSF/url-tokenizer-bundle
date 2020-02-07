@@ -1,5 +1,5 @@
 <?php
-namespace GollumSF\UrlTokenizerBundle\Tests\Tokenizer;
+namespace Test\GollumSF\UrlTokenizerBundle\Unit\Tokenizer;
 
 use GollumSF\ReflectionPropertyTest\ReflectionPropertyTrait;
 use GollumSF\UrlTokenizerBundle\Calendar\Calendar;

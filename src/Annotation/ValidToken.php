@@ -6,7 +6,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationAnnotation;
 
 /**
  * @Annotation
- * @Target({"METHOD"})
+ * @Target({"CLASS", "METHOD"})
  */
 class ValidToken extends ConfigurationAnnotation {
 	

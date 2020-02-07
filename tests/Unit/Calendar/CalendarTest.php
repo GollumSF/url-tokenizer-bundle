@@ -1,5 +1,5 @@
 <?php
-namespace Test\GollumSF\UrlTokenizerBundle\Calendar;
+namespace Test\GollumSF\UrlTokenizerBundle\Unit\Calendar;
 
 use GollumSF\UrlTokenizerBundle\Calendar\Calendar;
 use PHPUnit\Framework\TestCase;

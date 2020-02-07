@@ -1,6 +1,5 @@
 <?php
-
-namespace Test\GollumSF\UrlTokenizerBundle\Configuration;
+namespace Test\GollumSF\UrlTokenizerBundle\Unit\Configuration;
 
 use GollumSF\UrlTokenizerBundle\Configuration\UrlTokenizerConfiguration;
 use PHPUnit\Framework\TestCase;

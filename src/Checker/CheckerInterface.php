@@ -12,7 +12,7 @@ interface CheckerInterface {
 	/**
 	 * Test if url in master Request token is
 	 */
-	public function checkTokenMasterRequest(bool $fullUrl = false, ?string $key = NULL): bool;
+	public function checkTokenMasterRequest(bool $fullUrl = null, ?string $key = NULL): bool;
 
 	/**
 	 * Test if url in master Request token time is
@@ -22,12 +22,12 @@ interface CheckerInterface {
 	/**
 	 * Test if url in master Request token time is
 	 */
-	public function checkTokenAndTokenTimeMasterRequest(int $lifeTime, bool $fullUrl = false, ?string $key = NULL): bool;
+	public function checkTokenAndTokenTimeMasterRequest(int $lifeTime, bool $fullUrl = null, ?string $key = NULL): bool;
 	
 	/**
 	 * Test if url token is valid
 	 */
-	public function checkToken(string $url, bool $fullUrl = false, ?string $key = NULL): bool ;
+	public function checkToken(string $url, bool $fullUrl = null, ?string $key = NULL): bool ;
 
 	/**
 	 * Test if url token time is valid
@@ -37,6 +37,6 @@ interface CheckerInterface {
 	/**
 	 * Test if url token and token time is valid
 	 */
-	public function checkTokenAndTokenTime(string $url, int $lifeTime, bool $fullUrl = false, ?string $key = NULL): bool;
+	public function checkTokenAndTokenTime(string $url, int $lifeTime, bool $fullUrl = null, ?string $key = NULL): bool;
 	
 }

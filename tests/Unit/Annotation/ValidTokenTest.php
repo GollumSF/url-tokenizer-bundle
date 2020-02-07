@@ -1,5 +1,4 @@
 <?php
-
 namespace Test\GollumSF\UrlTokenizerBundle\Unit\Annotation;
 
 use GollumSF\UrlTokenizerBundle\Annotation\ValidToken;

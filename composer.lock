@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "6879f67c4d5958c4d66dbd1a5f7302de",
+    "content-hash": "d658fec361ba01621f4467a0190b23ce",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -2125,6 +2125,48 @@
             "time": "2020-01-17T21:11:47+00:00"
         },
         {
+            "name": "nyholm/symfony-bundle-test",
+            "version": "1.6.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/SymfonyTest/symfony-bundle-test.git",
+                "reference": "9d01e001821250dc2f6f6b148479f9c2fbc622dd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/SymfonyTest/symfony-bundle-test/zipball/9d01e001821250dc2f6f6b148479f9c2fbc622dd",
+                "reference": "9d01e001821250dc2f6f6b148479f9c2fbc622dd",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.5 || ^7.0",
+                "symfony/dependency-injection": "^3.4 || ^4.3 || ^5.0",
+                "symfony/framework-bundle": "^3.4 || ^4.3 || ^5.0",
+                "symfony/http-kernel": "^3.4 || ^4.3 || ^5.0",
+                "symfony/yaml": "^3.4 || ^4.3 || ^5.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8.36 || ^5.5 || ^6.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Nyholm\\BundleTest\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tobias Nyholm",
+                    "email": "tobias.nyholm@gmail.com"
+                }
+            ],
+            "time": "2019-12-07T14:06:46+00:00"
+        },
+        {
             "name": "phar-io/manifest",
             "version": "1.0.3",
             "source": {
@@ -3389,6 +3431,126 @@
             "description": "Library that helps with managing the version number of Git-hosted PHP projects",
             "homepage": "https://github.com/sebastianbergmann/version",
             "time": "2016-10-03T07:35:21+00:00"
+        },
+        {
+            "name": "symfony/browser-kit",
+            "version": "v5.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/browser-kit.git",
+                "reference": "b0294489a7fbb4f3f39c39efe6f0328cb09731b9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/browser-kit/zipball/b0294489a7fbb4f3f39c39efe6f0328cb09731b9",
+                "reference": "b0294489a7fbb4f3f39c39efe6f0328cb09731b9",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.2.5",
+                "symfony/dom-crawler": "^4.4|^5.0"
+            },
+            "require-dev": {
+                "symfony/css-selector": "^4.4|^5.0",
+                "symfony/http-client": "^4.4|^5.0",
+                "symfony/mime": "^4.4|^5.0",
+                "symfony/process": "^4.4|^5.0"
+            },
+            "suggest": {
+                "symfony/process": ""
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "5.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\BrowserKit\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony BrowserKit Component",
+            "homepage": "https://symfony.com",
+            "time": "2020-01-04T14:08:26+00:00"
+        },
+        {
+            "name": "symfony/dom-crawler",
+            "version": "v5.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/dom-crawler.git",
+                "reference": "439c3c7be4daa569deef0dd1e30cf3562108d062"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/dom-crawler/zipball/439c3c7be4daa569deef0dd1e30cf3562108d062",
+                "reference": "439c3c7be4daa569deef0dd1e30cf3562108d062",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.2.5",
+                "symfony/polyfill-ctype": "~1.8",
+                "symfony/polyfill-mbstring": "~1.0"
+            },
+            "conflict": {
+                "masterminds/html5": "<2.6"
+            },
+            "require-dev": {
+                "masterminds/html5": "^2.6",
+                "symfony/css-selector": "^4.4|^5.0"
+            },
+            "suggest": {
+                "symfony/css-selector": ""
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "5.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\DomCrawler\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony DomCrawler Component",
+            "homepage": "https://symfony.com",
+            "time": "2020-01-04T14:08:26+00:00"
         },
         {
             "name": "symfony/yaml",

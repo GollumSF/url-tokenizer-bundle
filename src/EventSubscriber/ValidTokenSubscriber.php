@@ -21,7 +21,7 @@ class ValidTokenSubscriber implements EventSubscriberInterface {
 	public static function getSubscribedEvents() {
 		return [
 			KernelEvents::CONTROLLER => [
-				['onKernelController', 255],
+				['onKernelController', -1],
 			],
 		];
 	}
@@ -38,7 +38,7 @@ class ValidTokenSubscriber implements EventSubscriberInterface {
 				throw new InvalidTokentHttpException('Token url invalid');
 			}
 			$lifeTime = $validToken->getLifeTime();
-			if ($lifeTime && !$this->checker->checkTokenTimeMasterRequest($lifeTime)) {
+			if ($lifeTime !== null && !$this->checker->checkTokenTimeMasterRequest($lifeTime)) {
 				throw new ExpiredTokentHttpException('Token url expired');
 			}
 		}
