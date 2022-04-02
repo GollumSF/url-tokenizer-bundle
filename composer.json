@@ -21,7 +21,7 @@
 		"wiki" : "https://github.com/GollumSF/url-tokenizer-bundle/blob/master/README.md"
 	},
 	"require" : {
-		"php": "^7.2",
+		"php": "^7.2|^7.3|^7.4|^8",
 		"symfony/dependency-injection": "^4.4|^5",
 		"sensio/framework-extra-bundle": "^5.5"
 	},
