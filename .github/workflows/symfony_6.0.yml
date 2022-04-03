@@ -19,3 +19,4 @@ jobs:
       with:
         symfony_version: '6.0'
         github_token: ${{ secrets.GITHUB_TOKEN }}
+        discord_webhook: ${{ secrets.DISCORD_WEBHOOK }}
