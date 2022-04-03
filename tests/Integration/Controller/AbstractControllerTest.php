@@ -2,18 +2,18 @@
 
 namespace Test\GollumSF\UrlTokenizerBundle\Integration\Controller;
 
-use Doctrine\Common\Annotations\AnnotationReader;
 use GollumSF\UrlTokenizerBundle\GollumSFUrlTokenizerBundle;
 use Nyholm\BundleTest\BaseBundleTestCase;
 use Nyholm\BundleTest\CompilerPass\PublicServicePass;
-use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\BrowserKit\AbstractBrowser;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 abstract class AbstractControllerTest extends BaseBundleTestCase {
 	
-	protected $projectPath = __DIR__ . '/../../ProjectTest';
+	protected function getProjectPath(): string {
+		return __DIR__ . '/../../ProjectTest';
+	}
 	
 	/** @var KernelInterface */
 	private $kernel;
@@ -36,11 +36,11 @@ abstract class AbstractControllerTest extends BaseBundleTestCase {
 	
 			// Add some other bundles we depend on
 			$this->kernel->addBundle(\Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle::class);
-	
+			
 			$this->kernel->addCompilerPasses([ new PublicServicePass('|GollumSF*|') ]);
 			
 			// Add some configuration
-			$this->kernel->addConfigFile($this->projectPath.'/Resources/config/config.yaml');
+			$this->kernel->addConfigFile($this->getProjectPath().'/Resources/config/config.yaml');
 	
 			// Boot the kernel.
 			$this->kernel->boot();

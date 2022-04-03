@@ -2,24 +2,49 @@
 
 namespace GollumSF\UrlTokenizerBundle\Annotation;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationAnnotation;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
 
 /**
  * @Annotation
  * @Target({"CLASS", "METHOD"})
  */
-class ValidToken extends ConfigurationAnnotation {
+#[\Attribute(\Attribute::TARGET_CLASS | \Attribute::TARGET_METHOD)]
+class ValidToken implements ConfigurationInterface {
 	
 	const ALIAS_NAME = 'gsf_valid_token';
 	
-	/** @var bool */
-	private $fullUrl = null;
-
-	/** @var string */
-	private $key = null;
-
 	/** @var int */
 	private $lifeTime = null;
+	
+	/** @var bool */
+	private $fullUrl = null;
+	
+	/** @var string */
+	private $key = null;
+	
+	/**
+	 * @param int $lifeTime
+	 * @param bool $fullUrl
+	 * @param string $key
+	 */
+	public function __construct(
+		$lifeTime = null,
+		$fullUrl = null,
+		$key = null
+	)
+	{
+		if (is_array($lifeTime)) {
+			trigger_deprecation('gollumsf/url_tokenizer_bundle', '4.0', 'Use native php attributes for %s', __CLASS__);
+			$this->lifeTime = isset($lifeTime['lifeTime']) ? $lifeTime['lifeTime'] : null;
+			$this->fullUrl = isset($lifeTime['fullUrl']) ? $lifeTime['fullUrl'] : null;
+			$this->key = isset($lifeTime['key']) ? $lifeTime['key'] : null;
+			
+			return;
+		}
+		$this->lifeTime = $lifeTime;
+		$this->fullUrl = $fullUrl;
+		$this->key = $key;
+	}
 	
 	/////////////
 	// Getters //
