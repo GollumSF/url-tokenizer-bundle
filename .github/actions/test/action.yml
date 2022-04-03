@@ -17,7 +17,7 @@ inputs:
   github_token:
     description: 'Token for deploy corverage'
     required: true
-  discord_webhook_url:
+  discord_webhook:
     description: 'Discord webhook'
     required: true
   

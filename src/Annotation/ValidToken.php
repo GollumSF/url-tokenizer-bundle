@@ -36,7 +36,7 @@ class ValidToken implements ConfigurationInterface {
 		if (is_array($lifeTime)) {
 			if (function_exists('trigger_deprecation')) {
 				// @codeCoverageIgnoreStart
-				trigger_deprecation('gollumsf/url_tokenizer_bundle', '4.0', 'Use native php attributes for %s', __CLASS__);
+				trigger_deprecation('gollumsf/url_tokenizer_bundle', '3.1', 'Use native php attributes for %s', __CLASS__);
 				// @codeCoverageIgnoreEnd
 			}
 			$this->lifeTime = isset($lifeTime['lifeTime']) ? $lifeTime['lifeTime'] : null;
