@@ -60,6 +60,10 @@ runs:
         composer global require php-coveralls/php-coveralls
         php-coveralls --coverage_clover=build/logs/clover.xml -v
         
+    - name: TEST
+      shell: bash
+      run: echo "coool" ${{ inputs.discord_webhook }} "ddd"
+      
     - name: Notify discord
       uses: th0th/notify-discord@v0.4.1
       if: ${{ always() }}
