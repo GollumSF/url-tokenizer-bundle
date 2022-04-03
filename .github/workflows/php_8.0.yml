@@ -18,3 +18,4 @@ jobs:
     - uses: ./.github/actions/test
       with:
         php_version: '8.0'
+        github_token: ${{ secrets.GITHUB_TOKEN }}

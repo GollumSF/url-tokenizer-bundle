@@ -18,3 +18,4 @@ jobs:
     - uses: ./.github/actions/test
       with:
         symfony_version: '5.4'
+        github_token: ${{ secrets.GITHUB_TOKEN }}

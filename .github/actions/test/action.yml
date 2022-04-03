@@ -14,7 +14,10 @@ inputs:
     description: 'Composer extra args'
     required: true
     default: ''
-    
+  github_token:
+    description: 'Token for deployr corverage'
+    required: true
+  
 runs:
   using: "composite"
   steps: 
@@ -47,9 +50,8 @@ runs:
     - name: Upload coverage results to Coveralls
       if: success()
       env:
-        COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        COVERALLS_REPO_TOKEN: ${{ inputs.github_token }}
       shell: bash
       run: |
         composer global require php-coveralls/php-coveralls
         php-coveralls --coverage_clover=build/logs/clover.xml -v
-
