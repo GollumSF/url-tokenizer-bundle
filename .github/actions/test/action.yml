@@ -3,9 +3,15 @@ name: 'Test'
 description: "Run test bundle"
 inputs:
   php_version:
+    description: 'Set php version'
     required: true
     default: '8.0'
   symfony_version:
+    description: 'Set symfony version'
+    required: true
+    default: ''
+  composer_flags:
+    description: 'Composer extra args'
     required: true
     default: ''
     
