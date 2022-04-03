@@ -1,4 +1,4 @@
-name: Symfony 5.1
+name: Symfony 5.0
 
 on:
   push:

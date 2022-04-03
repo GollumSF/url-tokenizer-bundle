@@ -18,4 +18,5 @@ jobs:
     - uses: ./.github/actions/test
       with:
         symfony_version: '5.1'
+        php_version: '7.2'
         github_token: ${{ secrets.GITHUB_TOKEN }}
