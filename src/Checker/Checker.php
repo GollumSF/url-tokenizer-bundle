@@ -5,6 +5,7 @@ namespace GollumSF\UrlTokenizerBundle\Checker;
 use GollumSF\UrlTokenizerBundle\Tokenizer\TokenizerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * Checker
@@ -31,7 +32,7 @@ class Checker implements CheckerInterface {
 	}
 
 	protected function getMasterRequest(): Request {
-		return $this->requestStack->getMasterRequest();
+		return version_compare(Kernel::VERSION, '6.0.0', '<') ? $this->requestStack->getMasterRequest() : $this->requestStack->getMainRequest();
 	}
 
 	/**

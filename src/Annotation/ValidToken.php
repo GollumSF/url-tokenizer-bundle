@@ -69,23 +69,4 @@ class ValidToken implements ConfigurationInterface {
 	public function allowArray() {
 		return false;
 	}
-	
-	/////////////
-	// Setters //
-	/////////////
-
-	public function setFullUrl(?bool $fullUrl): self {
-		$this->fullUrl = $fullUrl;
-		return $this;
-	}
-
-	public function setKey(?string $key): self {
-		$this->key = $key;
-		return $this;
-	}
-
-	public function setLifeTime(?int $lifeTime): self {
-		$this->lifeTime = $lifeTime;
-		return $this;
-	}
 }

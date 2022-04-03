@@ -11,6 +11,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpKernel\Kernel;
 
 
 /**
@@ -89,7 +90,7 @@ class CheckerTest extends TestCase {
 		$request = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->getMock();
 		$this->requestStack
 			->expects($this->once())
-			->method('getMasterRequest')
+			->method(version_compare(Kernel::VERSION, '6.0.0', '<') ? 'getMasterRequest' : 'getMainRequest')
 			->willReturn($request)
 		;
 		$request
@@ -155,11 +156,13 @@ class CheckerTest extends TestCase {
 	 * @dataProvider provideCheckTokenTime
 	 */
 	public  function testCheckTokenTimeOKMasterRequest($url) {
+		
+		
 		$urlTokenise = $this->tokenizer->generateUrl ($url);
 		$request = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->getMock();
 		$this->requestStack
 			->expects($this->once())
-			->method('getMasterRequest')
+			->method(version_compare(Kernel::VERSION, '6.0.0', '<') ? 'getMasterRequest' : 'getMainRequest')
 			->willReturn($request)
 		;
 		$request
@@ -195,7 +198,7 @@ class CheckerTest extends TestCase {
 		$request = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->getMock();
 		$this->requestStack
 			->expects($this->once())
-			->method('getMasterRequest')
+			->method(version_compare(Kernel::VERSION, '6.0.0', '<') ? 'getMasterRequest' : 'getMainRequest')
 			->willReturn($request)
 		;
 		$request
