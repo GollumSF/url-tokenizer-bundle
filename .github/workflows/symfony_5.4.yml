@@ -1,4 +1,4 @@
-name: PHP Composer
+name: Symfony 5.4
 
 on:
   push:
