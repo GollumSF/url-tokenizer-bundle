@@ -18,17 +18,21 @@ runs:
         php-version:  ${{ inputs.php_version }}.
       
     - name: Update composer
+      shell: bash
       run: composer self-update
         
     - name: Validate composer.json and composer.lock
+      shell: bash
       run: composer validate --strict
       
     - name: Intsall Symfony
+      shell: bash
       run: |
         if [ "$symfony_version" != "" ]; then composer require "symfony/symfony:${symfony_version}" --no-update; fi;
         composer update --prefer-dist --dev --no-interaction $COMPOSER_FLAGS
     
     - name: Run tests
+      shell: bash
       run: |
         mkdir -p build/logs
         vendor/bin/phpunit --coverage-text --coverage-clover build/logs/clover.xml --whitelist src tests/
