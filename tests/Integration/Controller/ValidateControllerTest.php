@@ -9,10 +9,10 @@ class ValidateControllerTest extends AbstractControllerTest {
 	public function provideValidate() {
 		return [
 			[ '/generate', '/validate?' ],
-//			[ '/generate-fullurl', '/validate-fullurl?' ],
-//			[ '/generate-no-fullurl', '/validate-no-fullurl?' ],
-//			[ '/generate-key', '/validate-key?' ],
-//			[ '/generate-lifetime', '/validate-lifetime?' ],
+			[ '/generate-fullurl', '/validate-fullurl?' ],
+			[ '/generate-no-fullurl', '/validate-no-fullurl?' ],
+			[ '/generate-key', '/validate-key?' ],
+			[ '/generate-lifetime', '/validate-lifetime?' ],
 		];
 	}
 
