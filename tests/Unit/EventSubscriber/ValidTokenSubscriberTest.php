@@ -55,7 +55,7 @@ class ValidTokenSubscriberTest extends TestCase {
 		;
 
 		$checker
-			->expects($this->at(0))
+			->expects($this->once())
 			->method('checkTokenMasterRequest')
 			->with($isFullUrl, $key)
 			->willReturn(true)
@@ -63,7 +63,7 @@ class ValidTokenSubscriberTest extends TestCase {
 
 		if ($callLifeTime) {
 			$checker
-				->expects($this->at(1))
+				->expects($this->once())
 				->method('checkTokenTimeMasterRequest')
 				->with($lifeTime)
 				->willReturn(true)
@@ -101,7 +101,7 @@ class ValidTokenSubscriberTest extends TestCase {
 		;
 
 		$checker
-			->expects($this->at(0))
+			->expects($this->once())
 			->method('checkTokenMasterRequest')
 			->with($isFullUrl, $key)
 			->willReturn(false)
@@ -137,13 +137,13 @@ class ValidTokenSubscriberTest extends TestCase {
 		;
 
 		$checker
-			->expects($this->at(0))
+			->expects($this->once())
 			->method('checkTokenMasterRequest')
 			->with(null, null)
 			->willReturn(true)
 		;
 		$checker
-			->expects($this->at(1))
+			->expects($this->once())
 			->method('checkTokenTimeMasterRequest')
 			->with(4242)
 			->willReturn(false)

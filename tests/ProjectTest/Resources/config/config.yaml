@@ -3,7 +3,9 @@ framework:
         utf8: true
         resource: '%kernel.project_dir%/tests/ProjectTest/Resources/config/routing.yaml'
         type: 'yaml'
-
+    session:
+        handler_id: ~
+        
 services:
     # default configuration for services in *this* file
     _defaults:

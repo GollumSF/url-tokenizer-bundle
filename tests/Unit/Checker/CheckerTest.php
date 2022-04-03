@@ -2,8 +2,8 @@
 namespace Test\GollumSF\UrlTokenizerBundle\Unit\Checkcer;
 
 
-use GollumSF\UrlTokenizerBundle\Configuration\UrlTokenizerConfigurationInterface;
 use GollumSF\UrlTokenizerBundle\Checker\Checker;
+use GollumSF\UrlTokenizerBundle\Configuration\UrlTokenizerConfigurationInterface;
 use GollumSF\UrlTokenizerBundle\Reflection\ControllerActionExtractor;
 use GollumSF\UrlTokenizerBundle\Reflection\ControllerActionExtractorInterface;
 use GollumSF\UrlTokenizerBundle\Tokenizer\Tokenizer;
@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
  *
  * @author Damien Duboeuf <smeagolworms4@gmail.com>
  */
-class CheckcerTest extends TestCase {
+class CheckerTest extends TestCase {
 	
 	const ALGO = 'sha256';
 	
