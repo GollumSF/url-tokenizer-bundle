@@ -43,5 +43,13 @@ runs:
       run: |
         mkdir -p build/logs
         vendor/bin/phpunit --coverage-text --coverage-clover build/logs/clover.xml --whitelist src tests/
-        
-    
+
+    - name: Upload coverage results to Coveralls
+      if: success()
+      env:
+        COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      shell: bash
+      run: |
+        composer global require php-coveralls/php-coveralls
+        php-coveralls --coverage_clover=build/logs/clover.xml -v
+
