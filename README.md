@@ -2,7 +2,7 @@
 
 [![Build Status](https://github.com/GollumSF/url-tokenizer-bundle/actions/workflows/symfony_4.4.yml/badge.svg?branch=master)](https://github.com/GollumSF/url-tokenizer-bundle/actions)
 [![Build Status](https://github.com/GollumSF/url-tokenizer-bundle/actions/workflows/symfony_5.4.yml/badge.svg?branch=master)](https://github.com/GollumSF/url-tokenizer-bundle/actions)
-[![Build Status](https://github.com/GollumSF/url-tokenizer-bundle/actions/workflows/symfony_6.0.yml/badge.svg?branch=master)](https://github.com/GollumSF/url-tokenizer-bundle/actions)
+[![Build Status](https://github.com/GollumSF/url-tokenizer-bundle/actions/workflows/symfony_6.4.yml/badge.svg?branch=master)](https://github.com/GollumSF/url-tokenizer-bundle/actions)
 
 [![Coverage](https://coveralls.io/repos/github/GollumSF/url-tokenizer-bundle/badge.svg?branch=master)](https://coveralls.io/github/GollumSF/url-tokenizer-bundle)
 [![License](https://poser.pugx.org/gollumsf/url-tokenizer-bundle/license)](https://packagist.org/packages/gollumsf/url-tokenizer-bundle)
