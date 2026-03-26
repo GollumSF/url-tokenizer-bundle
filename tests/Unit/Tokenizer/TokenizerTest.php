@@ -5,6 +5,8 @@ use GollumSF\ReflectionPropertyTest\ReflectionPropertyTrait;
 use GollumSF\UrlTokenizerBundle\Calendar\Calendar;
 use GollumSF\UrlTokenizerBundle\Configuration\UrlTokenizerConfigurationInterface;
 use GollumSF\UrlTokenizerBundle\Tokenizer\Tokenizer;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Depends;
 use PHPUnit\Framework\TestCase;
 
 
@@ -14,16 +16,16 @@ use PHPUnit\Framework\TestCase;
  * @author Damien Duboeuf <smeagolworms4@gmail.com>
  */
 class TokenizerTest extends TestCase {
-	
+
 	use ReflectionPropertyTrait;
 
 	const ALGO = 'sha256';
 	const TOKEN = 'SuperTestKey!é&95';
-	
+
 	/** @var Tokenizer */
 	private $tokenizer;
-	
-	public function provideQueryParameters() {
+
+	public static function provideQueryParameters() {
 		return [
 			[
 				'http://domain.com',
@@ -59,19 +61,17 @@ class TokenizerTest extends TestCase {
 		];
 	}
 
-	/**
-	 * @dataProvider provideQueryParameters
-	 */
+	#[DataProvider('provideQueryParameters')]
 	public function testQueryParameters($url, $result) {
-		$configuration = $this->getMockForAbstractClass(UrlTokenizerConfigurationInterface::class);
+		$configuration = $this->createMock(UrlTokenizerConfigurationInterface::class);
 		$tokenizer = new Tokenizer($configuration);
-		
+
 		$this->assertEquals(
 			$this->reflectionCallMethod($tokenizer, 'getQueryParameters', [ $url ]), $result
 		);
 	}
 
-	public function provideGetSortedQuery() {
+	public static function provideGetSortedQuery() {
 		return [
 			[ 'http://www.urltokenizer.com/fakepath?aaa=1&bb=two&ccc=ad%40d', 'aaa=1&bb=two&ccc=ad%40d', ],
 			[ 'http://www.urltokenizer.com/fakepath?bb=two&aaa=1&ccc=ad%40d', 'aaa=1&bb=two&ccc=ad%40d', ],
@@ -81,19 +81,17 @@ class TokenizerTest extends TestCase {
 		];
 	}
 
-	/**
-	 * @depends testQueryParameters
-	 * @dataProvider provideGetSortedQuery
-	 */
+	#[Depends('testQueryParameters')]
+	#[DataProvider('provideGetSortedQuery')]
 	public function testGetSortedQuery($url, $result) {
-		$configuration = $this->getMockForAbstractClass(UrlTokenizerConfigurationInterface::class);
+		$configuration = $this->createMock(UrlTokenizerConfigurationInterface::class);
 		$tokenizer = new Tokenizer($configuration);
-		
+
 		$ordered = $this->reflectionCallMethod($tokenizer, 'getSortedQuery', [ $url ]);
 		$this->assertEquals($ordered, $result);
 	}
 
-	public function provideGenerateTokenOnlyParam() {
+	public static function provideGenerateTokenOnlyParam() {
 		return [
 			[ false, 'sha256'   , 'http://www.urltokenizer.com/fakepath'                     , ''                    , 'KeyTest_1!'.uniqid(), ],
 			[ false, 'sha256'   , 'http://www.urltokenizer.com/fakepath?'                    , ''                    , 'KeyTest_2!'.uniqid(), ],
@@ -115,13 +113,11 @@ class TokenizerTest extends TestCase {
 		];
 	}
 
-	/**
-	 * @dataProvider provideGenerateTokenOnlyParam
-	 */
+	#[DataProvider('provideGenerateTokenOnlyParam')]
 	public function testGenerateTokenOnlyParam($fullURL, $algo, $url, $sortedUrl, $key) {
-		
+
 		$defaultToken = self::TOKEN.uniqid();
-		$configuration = $this->getMockForAbstractClass(UrlTokenizerConfigurationInterface::class);
+		$configuration = $this->createMock(UrlTokenizerConfigurationInterface::class);
 		$configuration
 			->method('getSecret')
 			->willReturn($defaultToken)
@@ -131,12 +127,12 @@ class TokenizerTest extends TestCase {
 			->method('getAlgo')
 			->willReturn($algo)
 		;
-		
+
 		if ($fullURL !== null) {
 			$configuration
 				->expects($this->never())
 				->method('getDefaultFullUrl')
-			;			
+			;
 		} else {
 			$configuration
 				->expects($this->once())
@@ -144,7 +140,7 @@ class TokenizerTest extends TestCase {
 				->willReturn(false)
 			;
 		}
-		
+
 		$tokenizer = new Tokenizer($configuration);
 
 		$token  = $tokenizer->generateToken($url, $fullURL, $key);
@@ -156,7 +152,7 @@ class TokenizerTest extends TestCase {
 	}
 
 
-	public function provideGenerateTokenFullMatch() {
+	public static function provideGenerateTokenFullMatch() {
 		return [
 			[ true, 'sha256'   , 'http://www.urltokenizer.com/fakepath'                     , ''                    , 'KeyTest_1!'.uniqid(), ],
 			[ true, 'sha256'   , 'http://www.urltokenizer.com/fakepath?'                    , ''                    , 'KeyTest_2!'.uniqid(), ],
@@ -178,13 +174,11 @@ class TokenizerTest extends TestCase {
 		];
 	}
 
-	/**
-	 * @dataProvider provideGenerateTokenFullMatch
-	 */
+	#[DataProvider('provideGenerateTokenFullMatch')]
 	public function testGenerateTokenFullMatch($fullURL, $algo, $url, $sortedUrl, $key) {
 
 		$defaultToken = self::TOKEN.uniqid();
-		$configuration = $this->getMockForAbstractClass(UrlTokenizerConfigurationInterface::class);
+		$configuration = $this->createMock(UrlTokenizerConfigurationInterface::class);
 		$configuration
 			->method('getSecret')
 			->willReturn($defaultToken)
@@ -216,8 +210,8 @@ class TokenizerTest extends TestCase {
 		$this->assertNotEmpty($token);
 		$this->assertEquals($token, $result);
 	}
-	
-	public function provideGenerateUrl() {
+
+	public static function provideGenerateUrl() {
 		return [
 			[ 'd', 't', 'http://www.urltokenizer.com/fakepath'                     , '?' ],
 			[ 'd', 't', 'http://www.urltokenizer.com/fakepath?'                    , '&' ],
@@ -229,15 +223,13 @@ class TokenizerTest extends TestCase {
 		];
 	}
 
-	/**
-	 * @depends testGenerateTokenOnlyParam
-	 * @depends testGenerateTokenFullMatch
-	 * @dataProvider provideGenerateUrl
-	 */
+	#[Depends('testGenerateTokenOnlyParam')]
+	#[Depends('testGenerateTokenFullMatch')]
+	#[DataProvider('provideGenerateUrl')]
 	public function testGenerateUrl($d, $t, $urlOri, $separator) {
 
 		$defaultToken = self::TOKEN.uniqid();
-		$configuration = $this->getMockForAbstractClass(UrlTokenizerConfigurationInterface::class);
+		$configuration = $this->createMock(UrlTokenizerConfigurationInterface::class);
 		$configuration
 			->method('getSecret')
 			->willReturn($defaultToken)
@@ -262,7 +254,7 @@ class TokenizerTest extends TestCase {
 			->method('getTokenTimeQueryName')
 			->willReturn($d)
 		;
-		
+
 		$calendar = $this->getMockBuilder(Calendar::class)->getMock();
 		$time = time();
 		$calendar
@@ -272,13 +264,13 @@ class TokenizerTest extends TestCase {
 		;
 
 		$tokenizer = new Tokenizer($configuration, $calendar);
-		
+
 		$url   = $tokenizer->generateUrl   ($urlOri);
 		$token = $tokenizer->generateToken ($urlOri.$separator.$d.'='.$time);
 		$this->assertEquals($url, $urlOri.$separator.$d.'='.$time.'&'.$t.'='.$token);
 	}
 
-	public function provideTokenOrder() {
+	public static function provideTokenOrder() {
 		return [
 			[ 'http://www.urltokenizer.com/fakepath?param1=aaa&param2=ccc'           , 'http://www.urltokenizer.com/fakepath?param2=ccc&param1=aaa' ],
 			[ 'http://www.urltokenizer.com/fakepath?param1=a%20aa&param2=ccc'        , 'http://www.urltokenizer.com/fakepath?param2=ccc&param1=a%20aa' ],
@@ -289,15 +281,13 @@ class TokenizerTest extends TestCase {
 			[ 'http://www.urltokenizer.com/fakepath?param1=aaa&=bbb&param2=ccc'      , 'http://www.urltokenizer.com/fakepath?param1=aaa&param2=ccc&=bbb' ],
 		];
 	}
-	
-	/**
-	 * @depends testGenerateUrl
-	 * @depends testRemoveTokenInUrl
-	 * @dataProvider provideTokenOrder
-	 */
+
+	#[Depends('testGenerateUrl')]
+	#[Depends('testRemoveTokenInUrl')]
+	#[DataProvider('provideTokenOrder')]
 	public  function testTokenOrder($url1, $url2) {
 		$defaultToken = self::TOKEN.uniqid();
-		$configuration = $this->getMockForAbstractClass(UrlTokenizerConfigurationInterface::class);
+		$configuration = $this->createMock(UrlTokenizerConfigurationInterface::class);
 		$configuration
 			->method('getSecret')
 			->willReturn($defaultToken)
@@ -311,13 +301,13 @@ class TokenizerTest extends TestCase {
 			->willReturn(true)
 		;
 		$tokenizer = new Tokenizer($configuration);
-		
+
 		$token1 = $tokenizer->generateToken($url1);
 		$token2 = $tokenizer->generateToken($url2);
 		$this->assertEquals($token1, $token2);
 	}
 
-	public function provideRemoveTokenInUrl() {
+	public static function provideRemoveTokenInUrl() {
 		return [
 			[ 't', 'http://www.urltokenizer.com/fakepath?param1=aaa&param2=ccc&t=0123456'                 , 'http://www.urltokenizer.com/fakepath?param1=aaa&param2=ccc'                  ],
 			[ 't', 'http://www.urltokenizer.com/fakepath?param1=a%20aa&param2=ccc&t=0123456'              , 'http://www.urltokenizer.com/fakepath?param1=a%20aa&param2=ccc'               ],
@@ -330,11 +320,9 @@ class TokenizerTest extends TestCase {
 		];
 	}
 
-	/**
-	 * @dataProvider provideRemoveTokenInUrl
-	 */
+	#[DataProvider('provideRemoveTokenInUrl')]
 	public  function testRemoveTokenInUrl($t, $urlWithToken, $url) {
-		$configuration = $this->getMockForAbstractClass(UrlTokenizerConfigurationInterface::class);
+		$configuration = $this->createMock(UrlTokenizerConfigurationInterface::class);
 		$configuration
 			->expects($this->once())
 			->method('getTokenQueryName')
@@ -344,7 +332,7 @@ class TokenizerTest extends TestCase {
 		$this->assertEquals($tokenizer->removeToken($urlWithToken), $url);
 	}
 
-	public function provideGetTokenInUrl() {
+	public static function provideGetTokenInUrl() {
 		return [
 			[ 't', 'http://www.urltokenizer.com/fakepath?t=a0123456789'                       , 'a0123456789' ],
 			[ 't', 'http://www.urltokenizer.com/fakepath?t=a0123456789&param1=ZZ&param2=hh'   , 'a0123456789' ],
@@ -354,11 +342,9 @@ class TokenizerTest extends TestCase {
 		];
 	}
 
-	/**
-	 * @dataProvider provideGetTokenInUrl
-	 */
+	#[DataProvider('provideGetTokenInUrl')]
 	public  function testGetTokenInUrl($t, $url, $token) {
-		$configuration = $this->getMockForAbstractClass(UrlTokenizerConfigurationInterface::class);
+		$configuration = $this->createMock(UrlTokenizerConfigurationInterface::class);
 		$configuration
 			->expects($this->once())
 			->method('getTokenQueryName')
@@ -368,7 +354,7 @@ class TokenizerTest extends TestCase {
 		$this->assertTrue ($tokenizer->getToken($url) == $token);
 	}
 
-	public function provideGetTokenNull() {
+	public static function provideGetTokenNull() {
 		return [
 			[ 't', 'http://www.urltokenizer.com/fakepath'                                     ],
 			[ 't', 'http://www.urltokenizer.com/fakepath?param1=ZZ&param2=hh'                 ],
@@ -377,11 +363,9 @@ class TokenizerTest extends TestCase {
 		];
 	}
 
-	/**
-	 * @dataProvider provideGetTokenNull
-	 */
+	#[DataProvider('provideGetTokenNull')]
 	public  function testGetTokenNull($t, $url) {
-		$configuration = $this->getMockForAbstractClass(UrlTokenizerConfigurationInterface::class);
+		$configuration = $this->createMock(UrlTokenizerConfigurationInterface::class);
 		$configuration
 			->expects($this->once())
 			->method('getTokenQueryName')
@@ -392,7 +376,7 @@ class TokenizerTest extends TestCase {
 	}
 
 
-	public function provideGetTokenTimeInUrl() {
+	public static function provideGetTokenTimeInUrl() {
 		return [
 			[ 'd', 'http://www.urltokenizer.com/fakepath?d=0123456'                       , 123456    ],
 			[ 'd', 'http://www.urltokenizer.com/fakepath?d=55555&param1=ZZ&param2=hh'     , 55555     ],
@@ -404,11 +388,9 @@ class TokenizerTest extends TestCase {
 		];
 	}
 
-	/**
-	 * @dataProvider provideGetTokenTimeInUrl
-	 */
+	#[DataProvider('provideGetTokenTimeInUrl')]
 	public  function testGetTokenTimeInUrl($d, $url, $time) {
-		$configuration = $this->getMockForAbstractClass(UrlTokenizerConfigurationInterface::class);
+		$configuration = $this->createMock(UrlTokenizerConfigurationInterface::class);
 		$configuration
 			->expects($this->once())
 			->method('getTokenTimeQueryName')
@@ -420,5 +402,4 @@ class TokenizerTest extends TestCase {
 
 
 
-	
 }

@@ -7,22 +7,22 @@ namespace GollumSF\UrlTokenizerBundle\Tokenizer;
  * @author Damien Duboeuf <smeagolworms4@gmail.com>
  */
 interface TokenizerInterface {
-	
+
 	/**
 	 * Generate tokens from an URL
 	 */
-	public function generateToken(string $url, bool $fullUrl = null, string $key = NULL): string;
-	
+	public function generateToken(string $url, ?bool $fullUrl = null, ?string $key = null): string;
+
 	/**
 	 * Generate an URL with its token from an URL without one
 	 */
-	public function generateUrl(string $url, bool $fullUrl = null, ?string $key = NULL): string;
-	
+	public function generateUrl(string $url, ?bool $fullUrl = null, ?string $key = null): string;
+
 	/**
 	 * Remove Tokens from URL
 	 */
 	public function removeToken(string $url): string;
-	
+
 	/**
 	 * Retrieve token from an url
 	 */

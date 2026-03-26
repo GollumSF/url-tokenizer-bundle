@@ -1,14 +1,19 @@
 # GollumSF Url Tokenizer
 
-[![Build Status](https://github.com/GollumSF/url-tokenizer-bundle/actions/workflows/symfony_4.4.yml/badge.svg?branch=master)](https://github.com/GollumSF/url-tokenizer-bundle/actions)
-[![Build Status](https://github.com/GollumSF/url-tokenizer-bundle/actions/workflows/symfony_5.4.yml/badge.svg?branch=master)](https://github.com/GollumSF/url-tokenizer-bundle/actions)
 [![Build Status](https://github.com/GollumSF/url-tokenizer-bundle/actions/workflows/symfony_6.4.yml/badge.svg?branch=master)](https://github.com/GollumSF/url-tokenizer-bundle/actions)
+[![Build Status](https://github.com/GollumSF/url-tokenizer-bundle/actions/workflows/symfony_7.4.yml/badge.svg?branch=master)](https://github.com/GollumSF/url-tokenizer-bundle/actions)
+[![Build Status](https://github.com/GollumSF/url-tokenizer-bundle/actions/workflows/symfony_8.0.yml/badge.svg?branch=master)](https://github.com/GollumSF/url-tokenizer-bundle/actions)
 
 [![Coverage](https://coveralls.io/repos/github/GollumSF/url-tokenizer-bundle/badge.svg?branch=master)](https://coveralls.io/github/GollumSF/url-tokenizer-bundle)
 [![License](https://poser.pugx.org/gollumsf/url-tokenizer-bundle/license)](https://packagist.org/packages/gollumsf/url-tokenizer-bundle)
 [![Latest Stable Version](https://poser.pugx.org/gollumsf/url-tokenizer-bundle/v/stable)](https://packagist.org/packages/gollumsf/url-tokenizer-bundle)
 [![Latest Unstable Version](https://poser.pugx.org/gollumsf/url-tokenizer-bundle/v/unstable)](https://packagist.org/packages/gollumsf/url-tokenizer-bundle)
 [![Discord](https://img.shields.io/discord/671741944149573687?color=purple&label=discord)](https://discord.gg/xMBc5SQ)
+
+## Requirements
+
+- PHP >= 8.2
+- Symfony 6.4 / 7.x / 8.0
 
 ## Installation:
 
@@ -20,7 +25,6 @@ composer require gollumsf/url-tokenizer-bundle
 ```php
 return [
     // [ ... ]
-    Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle::class => ['all' => true],
     GollumSF\UrlTokenizerBundle\GollumSFUrlTokenizerBundle::class => ['all' => true],
 ];
 ```
@@ -46,15 +50,15 @@ gollum_sf_url_tokenizer:
 use GollumSF\UrlTokenizerBundle\Tokenizer\TokenizerInterface;
 
 public function (TokenizerInterface $tokenizer) { // Inject service
-    
+
     $url = 'http://www.mydomain.com?param1=a';
-    
+
     // $url1Tokenised => http://www.mydomain.com?param1=a&t=THE_TOKENd=1580775131 (tokenize only parameter)
     $url1Tokenised = $tokenizer->generateUrl($url);
-    
+
     // $url1Tokenised => http://www.mydomain.com?param1=a&t=THE_TOKENd=1580775131 (tokenize full url)
     $url1Tokenised = $tokenizer->generateUrl($url, true);
-    
+
     // $url1Tokenised => http://www.mydomain.com?param1=a&t=THE_TOKENd=1580775131 (use custom secret)
     $url1Tokenised = $tokenizer->generateUrl($url, false, 'CUSTOM SECRET');
 
@@ -68,19 +72,19 @@ public function (TokenizerInterface $tokenizer) { // Inject service
 use GollumSF\UrlTokenizerBundle\Checker\CheckerInterface;
 
 public function (CheckerInterface $checker) { // Inject service
-    
+
     $urlWithToken = 'http://www.mydomain.com?param1=a&t=THE_TOKEN&d=1580775131';
-    
+
     // $result => true or false
     $result = $checker->checkToken($urlWithToken);
-    
+
     // $result => true or false (use full url)
     $result = $checker->checkToken($urlWithToken, true);
-    
+
     // $result => true or false (use custom secret)
     $result = $checker->checkToken($urlWithToken, null, 'CUSTOM SECRET');
 
-    // $result => true or false automatic use url from Master Request 
+    // $result => true or false automatic use url from Master Request
     $result = $checker->checkTokenMasterRequest();
     $result = $checker->checkTokenMasterRequest(true);
     $result = $checker->checkTokenMasterRequest(null, 'CUSTOM SECRET');
@@ -89,16 +93,16 @@ public function (CheckerInterface $checker) { // Inject service
     $result = $checker->checkTokenTime($urlWithToken, 3600);
     $result = $checker->checkTokenTimeMasterRequest(3600); // on Master Request
 
-    // $result => result on valid Token and Time 
+    // $result => result on valid Token and Time
     $result = $checker->checkTokenAndTokenTime($urlWithToken, 3600);
     $result = $checker->checkTokenAndTokenTimeMasterRequest(3600); // on Master Request
 
 }
 ```
 
-## Use annotation
+## Use attribute
 
-Use `ValidToken` annotation for restrain access at action.
+Use `ValidToken` attribute on controller actions to restrict access.
 
 ```php
 <?php
@@ -107,25 +111,21 @@ use GollumSF\UrlTokenizerBundle\Annotation\ValidToken;
 use GollumSF\UrlTokenizerBundle\Tokenizer\TokenizerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\RouterInterface;
 
 
 class GenerateController extends AbstractController {
 
-	/**
-	 * @Route("/generate")
-	 */
+	#[Route('/generate')]
 	public function generate(TokenizerInterface $tokenizer) {
 		return new Response($tokenizer->generateUrl(
 			$this->generateUrl('validate', [ 'param' => 'value' ], RouterInterface::ABSOLUTE_URL)
 		));
 	}
 
-	/**
-	 * @Route("/validate", name="validate")
-	 * @ValidToken()
-	 */
+	#[Route('/validate', name: 'validate')]
+	#[ValidToken()]
 	public function validate(TokenizerInterface $tokenizer) {
 		return new Response('good');
 	}
@@ -134,6 +134,6 @@ class GenerateController extends AbstractController {
 
 ### Options
 
- - **fullUrl**: (boolean, default = null) If null use condifuration value. 
- - **key**: (string, default = null) If null use condifuration value.
+ - **fullUrl**: (boolean, default = null) If null use configuration value.
+ - **key**: (string, default = null) If null use configuration value.
  - **lifeTime**: (integer, default = null) If null don't check time. Is lifetime of token before creation

@@ -3,10 +3,12 @@ namespace Test\GollumSF\UrlTokenizerBundle\Integration\Controller;
 
 use GollumSF\UrlTokenizerBundle\Exception\ExpiredTokentHttpException;
 use GollumSF\UrlTokenizerBundle\Exception\InvalidTokentHttpException;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 
 class ValidateControllerTest extends AbstractControllerTest {
-	
-	public function provideValidate() {
+
+	public static function provideValidate() {
 		return [
 			[ '/generate', '/validate?' ],
 			[ '/generate-fullurl', '/validate-fullurl?' ],
@@ -16,29 +18,27 @@ class ValidateControllerTest extends AbstractControllerTest {
 		];
 	}
 
-	/**
-	 * @dataProvider provideValidate
-	 */
+	#[DataProvider('provideValidate')]
+	#[RunInSeparateProcess]
 	public function testValidateSuccess($generate, $validate) {
 		$client = $this->getClient();
 
 		$client->request('GET', $generate);
 		$response = $client->getResponse();
 		$content = $response->getContent();
-		
+
 		$this->assertEquals($response->getStatusCode(), 200);
 		$this->assertStringContainsString($validate, $content);
 
 		$client->request('GET', $content);
 		$response = $client->getResponse();
-		
+
 		$this->assertEquals($response->getStatusCode(), 200);
 		$this->assertEquals($response->getContent(), 'good');
 	}
 
-	/**
-	 * @dataProvider provideValidate
-	 */
+	#[DataProvider('provideValidate')]
+	#[RunInSeparateProcess]
 	public function testValidateKoToken($generate, $validate) {
 
 		$client = $this->getClient();
@@ -53,7 +53,7 @@ class ValidateControllerTest extends AbstractControllerTest {
 		$content .= '&add_param=value';
 		$client->request('GET', $content);
 		$response = $client->getResponse();
-		
+
 		$json = json_decode($response->getContent(), true);
 
 		$this->assertIsArray($json);
@@ -61,7 +61,7 @@ class ValidateControllerTest extends AbstractControllerTest {
 		$this->assertEquals($response->getStatusCode(), 403);
 	}
 
-
+	#[RunInSeparateProcess]
 	public function testValidateKoLifetime() {
 
 		$client = $this->getClient();
@@ -74,7 +74,7 @@ class ValidateControllerTest extends AbstractControllerTest {
 		$this->assertStringContainsString('/validate-lifetime-ko?', $content);
 
 		sleep(1);
-		
+
 		$client->request('GET', $content);
 		$response = $client->getResponse();
 
@@ -84,5 +84,5 @@ class ValidateControllerTest extends AbstractControllerTest {
 		$this->assertEquals($json['class'], ExpiredTokentHttpException::class);
 		$this->assertEquals($response->getStatusCode(), 403);
 	}
-	
+
 }

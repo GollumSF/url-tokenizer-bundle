@@ -18,6 +18,3 @@ services:
 
     GollumSF\UrlTokenizerBundle\Checker\CheckerInterface:
         class: GollumSF\UrlTokenizerBundle\Checker\Checker
-
-    GollumSF\UrlTokenizerBundle\Reflection\ControllerActionExtractorInterface:
-        class: GollumSF\UrlTokenizerBundle\Reflection\ControllerActionExtractor

@@ -7,6 +7,7 @@ use GollumSF\UrlTokenizerBundle\DependencyInjection\GollumSFUrlTokenizerExtensio
 use GollumSF\UrlTokenizerBundle\EventSubscriber\ValidTokenSubscriber;
 use GollumSF\UrlTokenizerBundle\Tokenizer\TokenizerInterface;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class GollumSFUrlTokenizerExtensionTest extends AbstractExtensionTestCase {
 
@@ -15,19 +16,19 @@ class GollumSFUrlTokenizerExtensionTest extends AbstractExtensionTestCase {
 			new GollumSFUrlTokenizerExtension()
 		];
 	}
-	
+
 	public function testLoad() {
 		$this->load();
-		
+
 		$this->assertContainerBuilderHasService(TokenizerInterface::class);
 		$this->assertContainerBuilderHasService(CheckerInterface::class);
 		$this->assertContainerBuilderHasService(UrlTokenizerConfigurationInterface::class);
 		$this->assertContainerBuilderHasService(ValidTokenSubscriber::class);
 	}
 
-	public function providerLoadConfiguration() {
+	public static function providerLoadConfiguration() {
 		return [
-			[ 
+			[
 				[],
 				UrlTokenizerConfigurationInterface::DEFAULT_SECRET,
 				UrlTokenizerConfigurationInterface::DEFAULT_DEFAULT_FULL_URL,
@@ -35,21 +36,19 @@ class GollumSFUrlTokenizerExtensionTest extends AbstractExtensionTestCase {
 				UrlTokenizerConfigurationInterface::DEFAULT_TOKEN_QUERY_NAME,
 				UrlTokenizerConfigurationInterface::DEFAULT_TOKEN_TIME_QUERY_NAME
 			],
-			[ 
+			[
 				[
 					'secret'=> 'SECRET',
 					'default_full_url' => true,
-					'algo' => 'sha1', 
-					'token_query_name' => 'TTT', 
+					'algo' => 'sha1',
+					'token_query_name' => 'TTT',
 					'token_time_query_name' => 'DDD'
 				], 'SECRET', true, 'sha1', 'TTT', 'DDD'
 			],
 		];
 	}
 
-	/**
-	 * @dataProvider providerLoadConfiguration
-	 */
+	#[DataProvider('providerLoadConfiguration')]
 	public function testLoadConfiguration(
 		$config,
 		$secret,
@@ -59,7 +58,7 @@ class GollumSFUrlTokenizerExtensionTest extends AbstractExtensionTestCase {
 		$tokenTimeName
 	) {
 		$this->load($config);
-		
+
 		$this->assertContainerBuilderHasServiceDefinitionWithArgument(UrlTokenizerConfigurationInterface::class, 0, $secret);
 		$this->assertContainerBuilderHasServiceDefinitionWithArgument(UrlTokenizerConfigurationInterface::class, 1, $defaultFullUrl);
 		$this->assertContainerBuilderHasServiceDefinitionWithArgument(UrlTokenizerConfigurationInterface::class, 2, $algo);

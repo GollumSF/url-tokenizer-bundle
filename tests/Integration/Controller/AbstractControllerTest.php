@@ -3,46 +3,33 @@
 namespace Test\GollumSF\UrlTokenizerBundle\Integration\Controller;
 
 use GollumSF\UrlTokenizerBundle\GollumSFUrlTokenizerBundle;
-use Nyholm\BundleTest\BaseBundleTestCase;
-use Nyholm\BundleTest\CompilerPass\PublicServicePass;
+use Nyholm\BundleTest\TestKernel;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\BrowserKit\AbstractBrowser;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 
-abstract class AbstractControllerTest extends BaseBundleTestCase {
-	
+abstract class AbstractControllerTest extends TestCase {
+
 	protected function getProjectPath(): string {
 		return __DIR__ . '/../../ProjectTest';
 	}
-	
+
 	/** @var KernelInterface */
 	private $kernel;
-
-	protected function getBundleClass() {
-		return GollumSFUrlTokenizerBundle::class;
-	}
 
 	protected function setUp(): void {
 		parent::setUp();
 		$_ENV['SHELL_VERBOSITY'] = 1;
-		// Make all services public
-		$this->addCompilerPass(new PublicServicePass('|GollumSF*|'));
 	}
 
 	protected function getKernel(): KernelInterface {
 		if (!$this->kernel) {
-			// Create a new Kernel
-			$this->kernel = $this->createKernel();
-	
-			// Add some other bundles we depend on
-			$this->kernel->addBundle(\Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle::class);
-			
-			$this->kernel->addCompilerPasses([ new PublicServicePass('|GollumSF*|') ]);
-			
-			// Add some configuration
-			$this->kernel->addConfigFile($this->getProjectPath().'/Resources/config/config.yaml');
-	
-			// Boot the kernel.
+			$this->kernel = new TestKernel('test', true);
+			$this->kernel->addTestBundle(GollumSFUrlTokenizerBundle::class);
+			$this->kernel->setTestProjectDir(realpath(__DIR__ . '/../../..'));
+			$this->kernel->addTestConfig($this->getProjectPath().'/Resources/config/config.yaml');
+			$this->kernel->addTestRoutingFile($this->getProjectPath().'/Resources/config/routing.yaml');
 			$this->kernel->boot();
 		}
 		return $this->kernel;
@@ -54,5 +41,13 @@ abstract class AbstractControllerTest extends BaseBundleTestCase {
 
 	protected function getClient(): AbstractBrowser {
 		return $this->getContainer()->get('test.client');
+	}
+
+	protected function tearDown(): void {
+		if ($this->kernel) {
+			$this->kernel->shutdown();
+			$this->kernel = null;
+		}
+		parent::tearDown();
 	}
 }

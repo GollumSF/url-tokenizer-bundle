@@ -10,27 +10,27 @@ use GollumSF\UrlTokenizerBundle\Configuration\UrlTokenizerConfigurationInterface
  * @author Damien Duboeuf <smeagolworms4@gmail.com>
  */
 class Tokenizer implements TokenizerInterface {
-	
+
 	/**
 	 * @var UrlTokenizerConfigurationInterface
 	 */
 	private $configuration;
-	
+
 	/** @var Calendar */
 	private $calendar;
-	
+
 	public function __construct(
 		UrlTokenizerConfigurationInterface $configuration,
-		Calendar $calendar = null
+		?Calendar $calendar = null
 	) {
 		$this->configuration = $configuration;
 		$this->calendar = $calendar ? $calendar : new Calendar();
 	}
-	
+
 	/**
 	 * Generate tokens from an URL
 	 */
-	public function generateToken(string $url, bool $fullUrl = null, string $key = NULL): string {
+	public function generateToken(string $url, ?bool $fullUrl = null, ?string $key = null): string {
 		$baseUrl = '';
 		$fullUrl = $fullUrl === null ? $this->configuration->getDefaultFullUrl() : $fullUrl;
 		if ($fullUrl === true) {
@@ -38,34 +38,34 @@ class Tokenizer implements TokenizerInterface {
 		}
 		return hash_hmac($this->configuration->getAlgo(), $baseUrl.$this->getSortedQuery($url), $key ? $key : $this->configuration->getSecret());
 	}
-	
+
 	/**
 	 * Generate an URL with its token from an URL without one
 	 */
-	public function generateUrl(string $url, bool $fullUrl = null, ?string $key = NULL): string {
+	public function generateUrl(string $url, ?bool $fullUrl = null, ?string $key = null): string {
 
 		$tokenQueryName = $this->configuration->getTokenQueryName();
 		$tokenTimeQueryName = $this->configuration->getTokenTimeQueryName();
-		
+
 		$separator = (strpos($url, '?') === false) ? '?' : '&';
 		$url .= $separator.$tokenTimeQueryName.'='.$this->calendar->time();
-		
+
 		$token = $this->generateToken($url, $fullUrl, $key);
-		
+
 		return $url.'&'.$tokenQueryName.'='.rawurlencode($token);
 	}
-	
+
 	/**
 	 * Remove Tokens from URL
 	 */
 	public function removeToken(string $url): string {
 
 		$tokenQueryName = $this->configuration->getTokenQueryName();
-		
+
 		$arParams = $this->getQueryParameters($url);
 		$baseUrl = $arParams["baseUrl"];
 		$listParams = $arParams["listParams"];
-		
+
 		$return = "";
 		$first = true;
 		foreach ($listParams as $key => $arParams) {
@@ -78,11 +78,11 @@ class Tokenizer implements TokenizerInterface {
 				$first = false;
 			}
 		}
-		
+
 		return $baseUrl.$return;
 	}
-	
-	
+
+
 	/**
 	 * Retrieve token from an url
 	 */
@@ -114,9 +114,9 @@ class Tokenizer implements TokenizerInterface {
 				}
 			}
 		}
-		return NULL;
+		return null;
 	}
-	
+
 	/**
 	 * Sort query parameters and implode it
 	 */
@@ -133,7 +133,7 @@ class Tokenizer implements TokenizerInterface {
 		}
 		return implode("&", $out);
 	}
-	
+
 	/**
 	 * Get query parameters from url
 	 */
@@ -141,7 +141,7 @@ class Tokenizer implements TokenizerInterface {
 		$listParams  = [];
 		$baseUrl     = $url;
 		$queryParams = '';
-		
+
 		if (strpos($url, "?") !== false) {
 			$baseUrl     = substr($url, 0, strpos($url, "?"));
 			$queryParams = substr($url, strpos($url, "?")+1);
@@ -157,12 +157,12 @@ class Tokenizer implements TokenizerInterface {
 				}
 			}
 		}
-		
+
 		return [
 			"baseUrl" => $baseUrl,
 			"listParams" => $listParams
 		];
 	}
-	
-	
+
+
 }
