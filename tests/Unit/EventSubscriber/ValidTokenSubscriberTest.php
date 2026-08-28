@@ -66,7 +66,7 @@ class ValidTokenSubscriberTest extends TestCase {
 	#[DataProvider('provideOnKernelController')]
 	public function testOnKernelController($method, $isFullUrl, $key, $lifeTime, $callLifeTime) {
 		$kernel  = $this->createMock(KernelInterface::class);
-		$request = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->getMock();
+		$request = new Request();
 		$checker = $this->createMock(CheckerInterface::class);
 
 		$controller = new ValidTokenSubscriberTestController();
@@ -101,7 +101,7 @@ class ValidTokenSubscriberTest extends TestCase {
 	#[DataProvider('provideOnKernelController')]
 	public function testOnKernelControllerKoToken($method, $isFullUrl, $key) {
 		$kernel  = $this->createMock(KernelInterface::class);
-		$request = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->getMock();
+		$request = new Request();
 		$checker = $this->createMock(CheckerInterface::class);
 
 		$controller = new ValidTokenSubscriberTestController();
@@ -128,7 +128,7 @@ class ValidTokenSubscriberTest extends TestCase {
 
 	public function testOnKernelControllerKoTokenTime() {
 		$kernel  = $this->createMock(KernelInterface::class);
-		$request = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->getMock();
+		$request = new Request();
 		$checker = $this->createMock(CheckerInterface::class);
 
 		$controller = new ValidTokenSubscriberTestController();
@@ -156,7 +156,7 @@ class ValidTokenSubscriberTest extends TestCase {
 
 	public function testOnKernelControllerClassLevelAttribute() {
 		$kernel  = $this->createMock(KernelInterface::class);
-		$request = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->getMock();
+		$request = new Request();
 		$checker = $this->createMock(CheckerInterface::class);
 
 		$controller = new ValidTokenSubscriberTestClassLevelController();
@@ -181,7 +181,7 @@ class ValidTokenSubscriberTest extends TestCase {
 
 	public function testOnKernelControllerInvokable() {
 		$kernel  = $this->createMock(KernelInterface::class);
-		$request = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->getMock();
+		$request = new Request();
 		$checker = $this->createMock(CheckerInterface::class);
 
 		$controller = new ValidTokenSubscriberTestInvokableController();
@@ -200,7 +200,7 @@ class ValidTokenSubscriberTest extends TestCase {
 
 	public function testOnKernelControllerStringCallable() {
 		$kernel  = $this->createMock(KernelInterface::class);
-		$request = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->getMock();
+		$request = new Request();
 		$checker = $this->createMock(CheckerInterface::class);
 
 		$event = new ControllerEvent($kernel, 'strlen', $request, HttpKernelInterface::MAIN_REQUEST);
@@ -216,7 +216,7 @@ class ValidTokenSubscriberTest extends TestCase {
 
 	public function testOnKernelControllerNoAttribute() {
 		$kernel  = $this->createMock(KernelInterface::class);
-		$request = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->getMock();
+		$request = new Request();
 		$checker = $this->createMock(CheckerInterface::class);
 
 		$controller = new ValidTokenSubscriberTestController();
